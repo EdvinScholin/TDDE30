@@ -5,8 +5,11 @@ Idéer:
 
 
 
+huvudlösen => hashar x3 => key_factory isch
+ecrypter tar nyckeln från key_factory // den sparas som variabel?
 
 
+HEJJAGHETERWILMER123 => hashar algoritm x3 => med hashen skapar vi en krypteringsnyckel.
 
 
 

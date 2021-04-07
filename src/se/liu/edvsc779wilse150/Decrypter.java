@@ -13,7 +13,7 @@ public class Decrypter
 {
     private byte[] encryptedPassword;
     private KeyGenerator kg = KeyGenerator.getInstance("AES");
-    private Key key = kg.generateKey();
+    private Key key; // = kg.generateKey();
     private Cipher cipher = Cipher.getInstance("AES");
 
     public Decrypter(final byte[] encryptedPassword) throws NoSuchPaddingException, NoSuchAlgorithmException {

@@ -12,5 +12,10 @@ public class AccountList
         listOfAccounts.add(account);
     }
 
-
+    public void saveOnFile() throws FileNotFoundException {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try (PrintWriter printWriter = new PrintWriter(FILE_NAME)) {
+            gson.toJson(this, printWriter);
+        }
+    }
 }

@@ -11,8 +11,10 @@ public class PasswordManagerTester
     public static void main(String[] args)
 	    throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException
     {
-        Account account = new Account("WilmerS", "fatt");
-		EncryptedAccount encryptedAccount = new EncryptedAccount(account);
-		System.out.println(encryptedAccount.getUserName() + "\n" + new String(encryptedAccount.getEncryptedPassword()));
+        Account account = new Account("WilmerS", "mupp");
+        EncryptedAccount encryptedAccount = new EncryptedAccount(account);
+        System.out.println(encryptedAccount.getUserName() + "\n" + new String(encryptedAccount.getEncryptedPassword()));
+        Decrypter decrypter = new Decrypter(encryptedAccount.getEncryptedPassword(), account.getKey());
+        System.out.println("Decrypted: " + decrypter.decryptPassword());
     }
 }

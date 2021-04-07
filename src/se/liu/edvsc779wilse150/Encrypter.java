@@ -30,26 +30,4 @@ public class Encrypter
         byte[] result = cipher.doFinal(getPasswordBytes());
         return result;
     }
-
-    public static void main(String[] args) {
-        try {
-            String password = "Hej jag heter wilmer och jag har ett supersvårt lösenord";
-            KeyGenerator kg = KeyGenerator.getInstance("AES");
-            Key key = kg.generateKey();
-            Cipher cipher = Cipher.getInstance("AES");
-
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-            byte[] data = password.getBytes();
-            byte[] result = cipher.doFinal(data);
-            System.out.println(new String(result));
-            System.out.println(new String(data));
-
-            cipher.init(Cipher.DECRYPT_MODE, key);
-            byte[] original = cipher.doFinal(result);
-            System.out.println("Decrypted data: " + new String(original));
-
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | BadPaddingException | IllegalBlockSizeException | InvalidKeyException e) {
-            e.printStackTrace();
-        }
-    }
 }
