@@ -11,7 +11,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class Encrypter
 {
-    private String password = "Hello";
+    private String password;
     private KeyGenerator kg = KeyGenerator.getInstance("AES");
     private Key key = kg.generateKey();
     private Cipher cipher = Cipher.getInstance("AES");

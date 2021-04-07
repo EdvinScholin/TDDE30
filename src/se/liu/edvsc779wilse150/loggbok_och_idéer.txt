@@ -1,0 +1,20 @@
+Idéer:
+
+- Hasha användarnamn på accounts, kan man unhasha?
+	går inte att unhasha, men på något sätt iaf.
+
+
+
+
+
+
+
+
+
+Logg:
+
+30/3-21:
+En bra början på kryptering av lösenorden. Vi har kikat lite på hur det kanske ska fungera.
+
+31/3-21:
+Vi kan skapa ett account och encryptedaccount nu, nästa steg är att spara till en fil.
