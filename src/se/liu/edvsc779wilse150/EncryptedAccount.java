@@ -3,9 +3,11 @@ package se.liu.edvsc779wilse150;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import java.security.InvalidKeyException;
+import java.security.Key;
 
 public class EncryptedAccount
 {
+    /*
     private String userName;
     private byte[] encryptedPassword;
 
@@ -15,6 +17,7 @@ public class EncryptedAccount
         this.encryptedPassword = account.encryptPassword();
     }
 
+
     public String getUserName() {
         return userName;
     }
@@ -22,4 +25,6 @@ public class EncryptedAccount
     public byte[] getEncryptedPassword() {
         return encryptedPassword;
     }
+
+     */
 }
