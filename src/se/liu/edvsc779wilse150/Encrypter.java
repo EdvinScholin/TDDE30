@@ -13,11 +13,12 @@ public class Encrypter
 {
     private String password;
     private KeyGenerator kg = KeyGenerator.getInstance("AES");
-    private Key key = kg.generateKey();
+    private Key key;
     private Cipher cipher = Cipher.getInstance("AES");
 
-    public Encrypter(final String password) throws NoSuchPaddingException, NoSuchAlgorithmException {
+    public Encrypter(final String password, final Key key) throws NoSuchPaddingException, NoSuchAlgorithmException {
         this.password = password;
+        this.key = key;
     }
 
     private byte[] getPasswordBytes() {

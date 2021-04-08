@@ -16,11 +16,11 @@ public class Account
     private Key key = keyGen.getKey();
 
     public Account(final String userName, String password)
-            throws NoSuchAlgorithmException, NoSuchPaddingException, BadPaddingException, InvalidKeyException, IllegalBlockSizeException
+            throws NoSuchAlgorithmException, NoSuchPaddingException
     {
         this.userName = userName;
         this.password = password;
-        this.encrypter = new Encrypter(password);
+        this.encrypter = new Encrypter(password, key);
     }
 
     public byte[] encryptPassword() throws BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
@@ -29,5 +29,9 @@ public class Account
 
     public String getUserName() {
         return userName;
+    }
+
+    public Key getKey() {
+        return key;
     }
 }

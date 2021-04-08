@@ -16,13 +16,14 @@ public class Decrypter
     private Key key; // = kg.generateKey();
     private Cipher cipher = Cipher.getInstance("AES");
 
-    public Decrypter(final byte[] encryptedPassword) throws NoSuchPaddingException, NoSuchAlgorithmException {
-	this.encryptedPassword = encryptedPassword;
+    public Decrypter(final byte[] encryptedPassword, final Key key) throws NoSuchPaddingException, NoSuchAlgorithmException {
+		this.encryptedPassword = encryptedPassword;
+		this.key = key;
     }
 
     public String decryptPassword() throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
-	cipher.init(Cipher.DECRYPT_MODE, key);
-	byte[] originalPassword = cipher.doFinal(encryptedPassword);
-	return new String(originalPassword);
+	    cipher.init(Cipher.DECRYPT_MODE, key);
+	    byte[] originalPassword = cipher.doFinal(encryptedPassword);
+	    return new String(originalPassword);
     }
 }
