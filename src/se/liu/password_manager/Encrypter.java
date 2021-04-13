@@ -8,6 +8,11 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
+
+/**
+ *  This class is responsible for handling the AES encryption of submitted passwords.
+ */
+
 public class Encrypter
 {
     /*
