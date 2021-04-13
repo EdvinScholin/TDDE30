@@ -32,8 +32,7 @@ public class PasswordManagerTester
     }
 
     public static void main(String[] args)
-            throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException,
-            FileNotFoundException
+            throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, FileNotFoundException
     {
         PasswordManagerTester pMT = new PasswordManagerTester();
         KeyGen keyGen = new KeyGen();
@@ -51,12 +50,14 @@ public class PasswordManagerTester
         accountList.addAccount(account2);
 
         Account account = accountList.getEncryptedAccount(0);
-        System.out.println(account.getUserName());
+        System.out.println(account.getUsername());
         System.out.println("Password: " + decrypter.decryptPassword(account.getPassword(), key));
 
         accountList.removeAccount(account1);
 
-        accountList.editAccount(account2);
+        accountList.editAccount(account2, key);
+        System.out.println("Username" + account2.getUsername());
+        System.out.println( "Password: " + decrypter.decryptPassword(account2.getPassword(), key));
 
 
 

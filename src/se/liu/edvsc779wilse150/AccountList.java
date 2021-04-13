@@ -3,9 +3,13 @@ package se.liu.edvsc779wilse150;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
 import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.security.InvalidKeyException;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,25 +34,33 @@ public class AccountList
         return listOfEncryptedAccounts.get(index);
     }
 
-    public Account editAccount(Account oldAccount){
+    public void editAccount(Account oldAccount, Key key)
+            throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, FileNotFoundException
+    {
         String[] options = new String[] {"Edit password", "Edit username", "Edit both"};
-        int response = JOptionPane.showOptionDialog(null, "Message", "Title",
+        int response = JOptionPane.showOptionDialog(null, "What do you want to edit?", "Options",
                                                     JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
                                                     null, options, options[0]);
         if (response == 0) {
-            JOptionPane.showInputDialog(null, "What is your new password?");
-            System.out.println("passw");
+            String newPassword = JOptionPane.showInputDialog(null, "What is your new password?");
+            oldAccount.editPassword(newPassword, key);
+
+            saveOnFile();
         }
         if (response == 1) {
-            JOptionPane.showInputDialog(null, "What is your new username?");
-            System.out.println("account");
+            String newUsername = JOptionPane.showInputDialog(null, "What is your new username?");
+            oldAccount.editUsername(newUsername);
+
+            saveOnFile();
         }
         if (response == 2) {
-            JOptionPane.showInputDialog(null, "What is your new username?");
-            JOptionPane.showInputDialog(null, "What is your new password?");
-            System.out.println("both");
-        }
-        return null;
+            String newUsername = JOptionPane.showInputDialog(null, "What is your new username?");
+            oldAccount.editUsername(newUsername);
 
+            String newPassword = JOptionPane.showInputDialog(null, "What is your new password?");
+            oldAccount.editPassword(newPassword, key);
+
+            saveOnFile();
+        }
     }
 }
