@@ -13,9 +13,9 @@ public class Account
     public Account(final String userName, final String plainPassword, final Key key)
             throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException
     {
-        this.userName = userName;
-        this.password = password;
-        this.encrypter = new Encrypter(password, key);
+        this.username = userName;
+        Encrypter encrypter = new Encrypter();
+        this.password = encrypter.encryptPassword(plainPassword, key);
     }
 
     public String getUsername() {

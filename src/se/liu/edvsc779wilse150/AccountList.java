@@ -23,6 +23,10 @@ public class AccountList
         saveOnFile();
     }
 
+    public void removeAccount(Account account) {
+        listOfEncryptedAccounts.remove(account);
+    }
+
     public void saveOnFile() throws FileNotFoundException {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (PrintWriter printWriter = new PrintWriter(FILE_NAME)) {
