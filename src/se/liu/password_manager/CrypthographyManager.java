@@ -1,9 +1,5 @@
-package se.liu.edvsc779wilse150;
+package se.liu.password_manager;
 
-
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import java.security.Key;
 
 public interface CrypthographyManager
 {

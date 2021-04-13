@@ -1,10 +1,9 @@
-package se.liu.edvsc779wilse150;
+package se.liu.password_manager;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -21,13 +20,9 @@ public class Encrypter
     }
      */
 
-    private Cipher cipher = null;
-    {
-        try {
-            cipher = Cipher.getInstance("AES");
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-            e.printStackTrace();
-        }
+    private Cipher cipher = Cipher.getInstance("AES");
+
+    public Encrypter() throws NoSuchPaddingException, NoSuchAlgorithmException {
     }
 
     public byte[] encryptPassword(String password, Key key) throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {

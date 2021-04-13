@@ -1,17 +1,24 @@
-package se.liu.edvsc779wilse150;
+package se.liu.password_manager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.security.InvalidKeyException;
 import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * This class contains a list of accounts and can manipulate this list by adding and removing an account.
+ * The class is also able to save the list on a json-file and edit accounts with the help of methods in Account.
+ */
 
 public class AccountList
 {
@@ -39,7 +46,8 @@ public class AccountList
     }
 
     public void editAccount(Account oldAccount, Key key)
-            throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, FileNotFoundException
+            throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, FileNotFoundException, NoSuchPaddingException,
+            NoSuchAlgorithmException
     {
         String[] options = new String[] {"Edit password", "Edit username", "Edit both"};
         int response = JOptionPane.showOptionDialog(null, "What do you want to edit?", "Options",

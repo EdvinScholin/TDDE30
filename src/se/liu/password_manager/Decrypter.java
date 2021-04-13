@@ -1,4 +1,4 @@
-package se.liu.edvsc779wilse150;
+package se.liu.password_manager;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -7,6 +7,10 @@ import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+
+/**
+ * This class is responsible for decrypting passwords with a given algorithm and key.
+ */
 
 public class Decrypter
 {
@@ -21,13 +25,9 @@ public class Decrypter
     }
 
      */
-    private Cipher cipher = null;
-    {
-	try {
-	    cipher = Cipher.getInstance("AES");
-	} catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-	    e.printStackTrace();
-	}
+    private Cipher cipher = Cipher.getInstance("AES");
+
+    public Decrypter() throws NoSuchPaddingException, NoSuchAlgorithmException {
     }
 
     public String decryptPassword(byte[] encryptedPassword, Key key)

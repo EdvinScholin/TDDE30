@@ -1,9 +1,16 @@
-package se.liu.edvsc779wilse150;
+package se.liu.password_manager;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidKeyException;
 import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+
+/**
+ *  Represents an account which contains the encrypted password and the username for said account.
+ *  The class is able to change account information.
+ */
 
 public class Account
 {
@@ -11,7 +18,7 @@ public class Account
     private byte[] password;
 
     public Account(final String userName, final String plainPassword, final Key key)
-            throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException
+            throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException
     {
         this.username = userName;
         Encrypter encrypter = new Encrypter();
@@ -27,7 +34,9 @@ public class Account
     }
 
     // Ska vi ha det här här?
-    public void editPassword(String newPassword, Key key) throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+    public void editPassword(String newPassword, Key key)
+            throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException
+    {
         Encrypter encrypter = new Encrypter(); // Har den här för att inte den ska sparas i json-filen
         password = encrypter.encryptPassword(newPassword, key);
     }
