@@ -7,6 +7,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.security.InvalidKeyException;
@@ -23,7 +24,7 @@ import java.util.List;
 public class AccountList
 {
     private List<Account> listOfEncryptedAccounts = new ArrayList<>();
-    private static final String FILE_NAME = "./EncryptedAccounts.json";
+    private static final String FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
 
     public void addAccount(Account account) throws FileNotFoundException {
         listOfEncryptedAccounts.add(account);

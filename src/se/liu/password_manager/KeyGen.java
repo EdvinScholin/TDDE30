@@ -11,12 +11,12 @@ import java.security.NoSuchAlgorithmException;
 
 public class KeyGen
 {
-    private KeyGenerator kg = KeyGenerator.getInstance("AES");
+    private KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
 
     public KeyGen() throws NoSuchAlgorithmException {
     }
 
     public Key generateKey() {
-        return kg.generateKey();
+        return keyGenerator.generateKey();
     }
 }

@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,7 +20,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class PasswordManagerTester
 {
-    private static final String FILE_NAME = "./EncryptedAccounts.json";
+    private static final String FILE_NAME = "." + File.separator + "EncryptedAccounts.json"; // = "./Encryp...
 
     private AccountList readJsonAccountList() {
         Gson gson = new Gson();
@@ -100,7 +101,6 @@ public class PasswordManagerTester
         } catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
             e.printStackTrace();
         }
-
 
         /*
         System.out.println("EncryptedAccount" + encryptedAccount1.getUserName() + "\n" + new String(encryptedAccount1.getEncryptedPassword()));
