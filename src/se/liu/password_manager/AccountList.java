@@ -76,4 +76,12 @@ public class AccountList
             saveOnFile();
         }
     }
+
+    public DefaultListModel<String> returnListModel() {
+        DefaultListModel<String> listModel = new DefaultListModel<>();
+        for (Account acc : listOfEncryptedAccounts) {
+            listModel.addElement(acc.getUsername());
+        }
+        return listModel;
+    }
 }

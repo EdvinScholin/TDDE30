@@ -62,8 +62,8 @@ public class PasswordManagerTester
         Account account1 = null;
         Account account2 = null;
         try {
-            account1 = new Account("WilmerS", "mupp", key);
-            account2 = new Account("EdvinS", "balle", key);
+            account1 = new Account("WilmerS", "hej1", key);
+            account2 = new Account("EdvinS", "hej", key);
         } catch (NoSuchPaddingException | NoSuchAlgorithmException | IllegalBlockSizeException | BadPaddingException |
                 InvalidKeyException e) {
             e.printStackTrace();
@@ -85,14 +85,16 @@ public class PasswordManagerTester
             e.printStackTrace();
         }
 
-        accountList.removeAccount(account1);
+        //accountList.removeAccount(account1);
 
-        try {
+        /*try {
             accountList.editAccount(account2, key);
         } catch (IllegalBlockSizeException | FileNotFoundException | InvalidKeyException | BadPaddingException | NoSuchPaddingException |
                 NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
+
+         */
 
         System.out.println("Username" + account2.getUsername());
 
@@ -102,10 +104,7 @@ public class PasswordManagerTester
             e.printStackTrace();
         }
 
-        /*
-        System.out.println("EncryptedAccount" + encryptedAccount1.getUserName() + "\n" + new String(encryptedAccount1.getEncryptedPassword()));
-        Decrypter decrypter = new Decrypter(encryptedAccount1.getEncryptedPassword(), account1.getKey());
-        System.out.println("Decrypted: " + decrypter.decryptPassword());
-         */
+        PasswordManagerViewer pMV = new PasswordManagerViewer(accountList.returnListModel());
+        pMV.initializeFrame();
     }
 }
