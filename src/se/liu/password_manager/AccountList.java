@@ -26,7 +26,14 @@ public class AccountList
     private List<Account> listOfEncryptedAccounts = new ArrayList<>();
     private static final String FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
 
-    public void addAccount(Account account) throws FileNotFoundException {
+    public void addAccount(Key key)
+            throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
+            InvalidKeyException
+    {
+        System.out.println(key);
+        String username = askUserAboutAccount("Username:");
+        String password = askUserAboutAccount("Password:");
+        Account account = new Account(username, password, key);
         listOfEncryptedAccounts.add(account);
         saveOnFile();
     }
@@ -55,22 +62,22 @@ public class AccountList
                                                     JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
                                                     null, options, options[0]);
         if (response == 0) {
-            String newPassword = JOptionPane.showInputDialog(null, "What is your new password?");
+            String newPassword = askUserAboutAccount("What is your new password?");
             oldAccount.editPassword(newPassword, key);
 
             saveOnFile();
         }
         if (response == 1) {
-            String newUsername = JOptionPane.showInputDialog(null, "What is your new username?");
+            String newUsername = askUserAboutAccount("What is your new username?");
             oldAccount.editUsername(newUsername);
 
             saveOnFile();
         }
         if (response == 2) {
-            String newUsername = JOptionPane.showInputDialog(null, "What is your new username?");
+            String newUsername = askUserAboutAccount("What is your new username?");
             oldAccount.editUsername(newUsername);
 
-            String newPassword = JOptionPane.showInputDialog(null, "What is your new password?");
+            String newPassword = askUserAboutAccount("What is your new password?");
             oldAccount.editPassword(newPassword, key);
 
             saveOnFile();
