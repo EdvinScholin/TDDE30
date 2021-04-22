@@ -21,3 +21,10 @@ En bra början på kryptering av lösenorden. Vi har kikat lite på hur det kans
 
 31/3-21:
 Vi kan skapa ett account och encryptedaccount nu, nästa steg är att spara till en fil.
+
+13/4-21:
+Vi ska nu börja med att skapa swing komponenter.
+
+21/4-21:
+Att fixa: Hur ska vi göra när vi ska adda account. Key blir ett stort problem har jag märkt. Hur ska vi få in key på korrekt sätt?
+	  Vi måste fixa så att vi får samma nyckel hela tiden, dags för masterlösenordet nu?
