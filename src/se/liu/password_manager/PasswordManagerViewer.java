@@ -53,18 +53,19 @@ public class PasswordManagerViewer
     }
 
     private void initializeJList() {
-        new JList(logicHandler.getAccountList().returnListModel());
+        jList = new JList(logicHandler.getAccountList().returnListModel());
     }
-
-    private void intializeLabel() {
-        label = new JLabel("No account selected");
-    }
+//
+//    private void intializeLabel() {
+//        label = new JLabel("No account selected");
+//    }
 
     private void initializeScrollablePane() {
         frame.add(new JScrollPane(jList), "span 2, grow");
     }
 
     private void initializeLabel() {
+        label = new JLabel("No account selected");
         label.setVerticalAlignment(JLabel.TOP);
         Border border = BorderFactory.createLineBorder(Color.ORANGE);
         label.setBorder(border);
@@ -106,46 +107,90 @@ public class PasswordManagerViewer
             this.button = button;
             this.account = account;
         }
-
+        //PROBLEM!!! Jlist uppdateras inte efter att t.ex. ändrat på ett konto, eller t.ex. tagit bort ett konto.
+        // Fattar inte riktigt hur mouseClicked funkar men just nu verkar det som att den bara ändrar på första kontot i listan.
         @Override public void mouseClicked(final MouseEvent e) {
             super.mouseClicked(e);
-            String[] options = new String[] {"Edit password", "Edit username", "Edit both"};
-            int response = JOptionPane.showOptionDialog(null, "What do you want to edit?", "Options",
-                                                        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
-                                                        null, options, options[0]);
+            if (button == ButtonOption.EDIT) {
+                String[] options = new String[] {"Edit password", "Edit username", "Edit both"};
+                int response = JOptionPane.showOptionDialog(null, "What do you want to edit?", "Options",
+                                                            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                                                            null, options, options[0]);
 
-            if (response == 0) {
-                String newPassword = askUserAboutAccount("What is your new password?");
-
-                oldAccount.editPassword(newPassword, key);
-
-                saveOnFile();
+                if (response == 0) {
+                    String newPassword = askUserAboutAccount("What is your new password?");
+                    try {
+                        logicHandler.buttonAction(button, account, null, newPassword);
+                    } catch (FileNotFoundException fileNotFoundException) {
+                        fileNotFoundException.printStackTrace();
+                    } catch (IllegalBlockSizeException illegalBlockSizeException) {
+                        illegalBlockSizeException.printStackTrace();
+                    } catch (NoSuchPaddingException noSuchPaddingException) {
+                        noSuchPaddingException.printStackTrace();
+                    } catch (BadPaddingException badPaddingException) {
+                        badPaddingException.printStackTrace();
+                    } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
+                        noSuchAlgorithmException.printStackTrace();
+                    } catch (InvalidKeyException invalidKeyException) {
+                        invalidKeyException.printStackTrace();
+                    }
+                }
+                if (response == 1) {
+                    String newUsername = askUserAboutAccount("What is your new username?");
+                    try {
+                        logicHandler.buttonAction(button, account, newUsername, null);
+                    } catch (FileNotFoundException fileNotFoundException) {
+                        fileNotFoundException.printStackTrace();
+                    } catch (IllegalBlockSizeException illegalBlockSizeException) {
+                        illegalBlockSizeException.printStackTrace();
+                    } catch (NoSuchPaddingException noSuchPaddingException) {
+                        noSuchPaddingException.printStackTrace();
+                    } catch (BadPaddingException badPaddingException) {
+                        badPaddingException.printStackTrace();
+                    } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
+                        noSuchAlgorithmException.printStackTrace();
+                    } catch (InvalidKeyException invalidKeyException) {
+                        invalidKeyException.printStackTrace();
+                    }
+                }
+                if (response == 2) {
+                    String newUsername = askUserAboutAccount("What is your new username?");
+                    String newPassword = askUserAboutAccount("What is your new password?");
+                    try {
+                        logicHandler.buttonAction(button, account, newUsername, newPassword);
+                    } catch (FileNotFoundException fileNotFoundException) {
+                        fileNotFoundException.printStackTrace();
+                    } catch (IllegalBlockSizeException illegalBlockSizeException) {
+                        illegalBlockSizeException.printStackTrace();
+                    } catch (NoSuchPaddingException noSuchPaddingException) {
+                        noSuchPaddingException.printStackTrace();
+                    } catch (BadPaddingException badPaddingException) {
+                        badPaddingException.printStackTrace();
+                    } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
+                        noSuchAlgorithmException.printStackTrace();
+                    } catch (InvalidKeyException invalidKeyException) {
+                        invalidKeyException.printStackTrace();
+                    }
+                }
             }
-            if (response == 1) {
-                String newUsername = askUserAboutAccount("What is your new username?");
-                oldAccount.editUsername(newUsername);
-
-                saveOnFile();
-            }
-            if (response == 2) {
-                String newUsername = askUserAboutAccount("What is your new username?");
-                oldAccount.editUsername(newUsername);
-
-                String newPassword = askUserAboutAccount("What is your new password?");
-                oldAccount.editPassword(newPassword, key);
-
-                saveOnFile();
-            }
-
-            /*
-            try {
-                logicHandler.buttonAction(button, account);
-            } catch (FileNotFoundException | InvalidKeyException | NoSuchAlgorithmException | BadPaddingException | NoSuchPaddingException
-                    | IllegalBlockSizeException fileNotFoundException) {
-                fileNotFoundException.printStackTrace();
+            else {
+                try {
+                    logicHandler.buttonAction(button, account, null, null);
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                } catch (IllegalBlockSizeException illegalBlockSizeException) {
+                    illegalBlockSizeException.printStackTrace();
+                } catch (NoSuchPaddingException noSuchPaddingException) {
+                    noSuchPaddingException.printStackTrace();
+                } catch (BadPaddingException badPaddingException) {
+                    badPaddingException.printStackTrace();
+                } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
+                    noSuchAlgorithmException.printStackTrace();
+                } catch (InvalidKeyException invalidKeyException) {
+                    invalidKeyException.printStackTrace();
+                }
             }
 
-             */
         }
     }
 

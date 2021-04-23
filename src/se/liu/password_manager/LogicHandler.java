@@ -51,19 +51,19 @@ public class LogicHandler
         }
     }
 
-    public void buttonAction(ButtonOption buttonOption, Account account)
+    public void buttonAction(ButtonOption buttonOption, Account account, String newUsername, String newPassword)
             throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
             InvalidKeyException
     {
         switch (buttonOption) {
             case ADD:
-                accountList.addAccount(key);
+                //accountList.addAccount(key);
                 break;
             case REMOVE:
                 accountList.removeAccount(account);
                 break;
             case EDIT:
-                accountList.editAccount(account, key);
+                accountList.editAccount(account, key, newUsername, newPassword);
                 break;
         }
     }

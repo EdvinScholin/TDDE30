@@ -25,18 +25,18 @@ public class AccountList
 {
     private List<Account> listOfEncryptedAccounts = new ArrayList<>();
     private static final String FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
-
-    public void addAccount(Key key)
-            throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
-            InvalidKeyException
-    {
-        System.out.println(key);
-        String username = askUserAboutAccount("Username:");
-        String password = askUserAboutAccount("Password:");
-        Account account = new Account(username, password, key);
-        listOfEncryptedAccounts.add(account);
-        saveOnFile();
-    }
+//
+//    public void addAccount(Key key)
+//            throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
+//            InvalidKeyException
+//    {
+//        System.out.println(key);
+//        String username = askUserAboutAccount("Username:");
+//        String password = askUserAboutAccount("Password:");
+//        Account account = new Account(username, password, key);
+//        listOfEncryptedAccounts.add(account);
+//        saveOnFile();
+//    }
 
     public void removeAccount(Account account) {
         listOfEncryptedAccounts.remove(account);
@@ -53,33 +53,21 @@ public class AccountList
         return listOfEncryptedAccounts.get(index);
     }
 
-    public void editAccount(Account oldAccount, Key key)
+    public void editAccount(Account account, Key key, String newUsername, String newPassword)
             throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, FileNotFoundException, NoSuchPaddingException,
             NoSuchAlgorithmException
     {
-        String[] options = new String[] {"Edit password", "Edit username", "Edit both"};
-        int response = JOptionPane.showOptionDialog(null, "What do you want to edit?", "Options",
-                                                    JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
-                                                    null, options, options[0]);
-        if (response == 0) {
-            String newPassword = askUserAboutAccount("What is your new password?");
-            oldAccount.editPassword(newPassword, key);
-
+        if (newUsername == null && newPassword != null) {
+            account.editPassword(newPassword, key);
             saveOnFile();
         }
-        if (response == 1) {
-            String newUsername = askUserAboutAccount("What is your new username?");
-            oldAccount.editUsername(newUsername);
-
+        if (newUsername != null && newPassword == null) {
+            account.editUsername(newUsername);
             saveOnFile();
         }
-        if (response == 2) {
-            String newUsername = askUserAboutAccount("What is your new username?");
-            oldAccount.editUsername(newUsername);
-
-            String newPassword = askUserAboutAccount("What is your new password?");
-            oldAccount.editPassword(newPassword, key);
-
+        if (newUsername != null && newPassword != null) {
+            account.editUsername(newUsername);
+            account.editPassword(newPassword, key);
             saveOnFile();
         }
     }

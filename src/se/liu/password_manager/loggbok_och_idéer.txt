@@ -1,3 +1,12 @@
+Problem:
+Jlistan måste uppdateras efter att man tryckt på någon av knapparna, för just nu så kan man ta bort och ändra konton utan att jlistan ändrar på sig, vilket kan resultera i att den blir out of bounds.
+
+
+
+
+
+
+
 Idéer:
 
 - Hasha användarnamn på accounts, kan man unhasha?
