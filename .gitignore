@@ -1,3 +1,5 @@
+# Our own git-ignore files:
+EncryptedAccounts.json
 
 # Created by https://www.toptal.com/developers/gitignore/api/java,python,intellij,emacs,vim,visualstudiocode,libreoffice,linux,macos,windows,eclipse
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,python,intellij,emacs,vim,visualstudiocode,libreoffice,linux,macos,windows,eclipse
