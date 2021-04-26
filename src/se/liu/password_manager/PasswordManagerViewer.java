@@ -18,23 +18,23 @@ import java.security.NoSuchAlgorithmException;
 public class PasswordManagerViewer
 {
     private JFrame frame = null;
-    private LogicHandler logicHandler = null; //En mellanhand till logiska och visuella planet. Vill visuella planet ha information, frågar den
-                                        // logicHandler.
+    private LogicHandler logicHandler = null;   //En mellanhand till logiska och visuella planet. Vill visuella planet ha information,
+                                                // frågar den logicHandler.
+    private int selectedIndex = 0;
     private JList jList = null;
+    private JScrollPane jScrollPane = null;
     private JLabel label = null;
-    private int selectedItem = 0;
     private JButton buttonAdd = null, buttonRemove = null, buttonEdit = null;
 
     public void show() throws NoSuchPaddingException, NoSuchAlgorithmException {
         initializeFrame();
         initializeLogicHandler();
-        initializeJList();
 
         frame.setLayout(new MigLayout("", "[grow][grow][grow]", "[][grow]"));
         frame.setSize(500, 500);
 
         addJButtons();
-        initializeScrollablePane();
+        setJList();
         initializeLabel();
 
         addListeners();
@@ -52,20 +52,14 @@ public class PasswordManagerViewer
         logicHandler = new LogicHandler();
     }
 
-    private void initializeJList() {
+    private void setJList() {
         jList = new JList(logicHandler.getAccountList().returnListModel());
-    }
-//
-//    private void intializeLabel() {
-//        label = new JLabel("No account selected");
-//    }
-
-    private void initializeScrollablePane() {
-        frame.add(new JScrollPane(jList), "span 2, grow");
+        jScrollPane = new JScrollPane(jList);
+        frame.add(jScrollPane, "span 2, grow");
     }
 
     private void initializeLabel() {
-        label = new JLabel("No account selected");
+        label = new JLabel(selectedAccount().getUsername());
         label.setVerticalAlignment(JLabel.TOP);
         Border border = BorderFactory.createLineBorder(Color.ORANGE);
         label.setBorder(border);
@@ -83,16 +77,16 @@ public class PasswordManagerViewer
 
     private void addListeners() {
         jList.addMouseListener(jListMouseListener);
-        buttonAdd.addMouseListener(new ButtonMouseListener(ButtonOption.ADD, selectedAccount()));
-        buttonRemove.addMouseListener(new ButtonMouseListener(ButtonOption.REMOVE, selectedAccount()));
-        buttonEdit.addMouseListener(new ButtonMouseListener(ButtonOption.EDIT, selectedAccount()));
+        buttonAdd.addMouseListener(new ButtonMouseListener(ButtonOption.ADD));
+        buttonRemove.addMouseListener(new ButtonMouseListener(ButtonOption.REMOVE));
+        buttonEdit.addMouseListener(new ButtonMouseListener(ButtonOption.EDIT));
     }
 
     MouseListener jListMouseListener = new MouseAdapter()
     {
         @Override public void mouseClicked(final MouseEvent e) {
             super.mouseClicked(e);
-            selectedItem = jList.getSelectedIndex();
+            selectedIndex = jList.getSelectedIndex();
             Account account = selectedAccount();
             label.setText(account.getUsername());
         }
@@ -101,101 +95,50 @@ public class PasswordManagerViewer
     private class ButtonMouseListener extends MouseAdapter
     {
         private final ButtonOption button;
-        private final Account account;
 
-        private ButtonMouseListener(final ButtonOption button, final Account account) {
+        private ButtonMouseListener(final ButtonOption button) {
             this.button = button;
-            this.account = account;
         }
-        //PROBLEM!!! Jlist uppdateras inte efter att t.ex. ändrat på ett konto, eller t.ex. tagit bort ett konto.
-        // Fattar inte riktigt hur mouseClicked funkar men just nu verkar det som att den bara ändrar på första kontot i listan.
+        //PROBLEM!! Det enda som är kvar är att namnet inte ändras men i själva beskrivningen ändras namnet.
         @Override public void mouseClicked(final MouseEvent e) {
             super.mouseClicked(e);
+            String newUsername = null;
+            String newPassword = null;
+
             if (button == ButtonOption.EDIT) {
                 String[] options = new String[] {"Edit password", "Edit username", "Edit both"};
                 int response = JOptionPane.showOptionDialog(null, "What do you want to edit?", "Options",
                                                             JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
                                                             null, options, options[0]);
-
                 if (response == 0) {
-                    String newPassword = askUserAboutAccount("What is your new password?");
-                    try {
-                        logicHandler.buttonAction(button, account, null, newPassword);
-                    } catch (FileNotFoundException fileNotFoundException) {
-                        fileNotFoundException.printStackTrace();
-                    } catch (IllegalBlockSizeException illegalBlockSizeException) {
-                        illegalBlockSizeException.printStackTrace();
-                    } catch (NoSuchPaddingException noSuchPaddingException) {
-                        noSuchPaddingException.printStackTrace();
-                    } catch (BadPaddingException badPaddingException) {
-                        badPaddingException.printStackTrace();
-                    } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
-                        noSuchAlgorithmException.printStackTrace();
-                    } catch (InvalidKeyException invalidKeyException) {
-                        invalidKeyException.printStackTrace();
-                    }
+                    newPassword = askUserAboutAccount("What is your new password?");
                 }
                 if (response == 1) {
-                    String newUsername = askUserAboutAccount("What is your new username?");
-                    try {
-                        logicHandler.buttonAction(button, account, newUsername, null);
-                    } catch (FileNotFoundException fileNotFoundException) {
-                        fileNotFoundException.printStackTrace();
-                    } catch (IllegalBlockSizeException illegalBlockSizeException) {
-                        illegalBlockSizeException.printStackTrace();
-                    } catch (NoSuchPaddingException noSuchPaddingException) {
-                        noSuchPaddingException.printStackTrace();
-                    } catch (BadPaddingException badPaddingException) {
-                        badPaddingException.printStackTrace();
-                    } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
-                        noSuchAlgorithmException.printStackTrace();
-                    } catch (InvalidKeyException invalidKeyException) {
-                        invalidKeyException.printStackTrace();
-                    }
+                    newUsername = askUserAboutAccount("What is your new username?");
                 }
                 if (response == 2) {
-                    String newUsername = askUserAboutAccount("What is your new username?");
-                    String newPassword = askUserAboutAccount("What is your new password?");
-                    try {
-                        logicHandler.buttonAction(button, account, newUsername, newPassword);
-                    } catch (FileNotFoundException fileNotFoundException) {
-                        fileNotFoundException.printStackTrace();
-                    } catch (IllegalBlockSizeException illegalBlockSizeException) {
-                        illegalBlockSizeException.printStackTrace();
-                    } catch (NoSuchPaddingException noSuchPaddingException) {
-                        noSuchPaddingException.printStackTrace();
-                    } catch (BadPaddingException badPaddingException) {
-                        badPaddingException.printStackTrace();
-                    } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
-                        noSuchAlgorithmException.printStackTrace();
-                    } catch (InvalidKeyException invalidKeyException) {
-                        invalidKeyException.printStackTrace();
-                    }
+                    newUsername = askUserAboutAccount("What is your new username?");
+                    newPassword = askUserAboutAccount("What is your new password?");
                 }
             }
-            else {
-                try {
-                    logicHandler.buttonAction(button, account, null, null);
-                } catch (FileNotFoundException fileNotFoundException) {
-                    fileNotFoundException.printStackTrace();
-                } catch (IllegalBlockSizeException illegalBlockSizeException) {
-                    illegalBlockSizeException.printStackTrace();
-                } catch (NoSuchPaddingException noSuchPaddingException) {
-                    noSuchPaddingException.printStackTrace();
-                } catch (BadPaddingException badPaddingException) {
-                    badPaddingException.printStackTrace();
-                } catch (NoSuchAlgorithmException noSuchAlgorithmException) {
-                    noSuchAlgorithmException.printStackTrace();
-                } catch (InvalidKeyException invalidKeyException) {
-                    invalidKeyException.printStackTrace();
-                }
+            else if(button == ButtonOption.ADD) {
+                    newUsername = askUserAboutAccount("Username:");
+                    newPassword = askUserAboutAccount("Password:");
             }
 
+            try {
+                logicHandler.buttonAction(button, selectedAccount(), newUsername, newPassword);
+            } catch (FileNotFoundException | IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException
+                    | NoSuchAlgorithmException | InvalidKeyException exception) {
+                exception.printStackTrace();
+            }
+
+            jScrollPane.updateUI();
         }
     }
 
     private Account selectedAccount() {
-        return logicHandler.getAccountList().getEncryptedAccount(selectedItem);
+        return logicHandler.getAccountList().getEncryptedAccount(selectedIndex);
     }
 
     private String askUserAboutAccount(String question) {

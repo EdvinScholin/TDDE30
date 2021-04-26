@@ -16,15 +16,15 @@ import java.security.NoSuchAlgorithmException;
 
 
 /**
- * This is a medium between the visual layer and the info
+ * This is a medium between the visual layer and the logical layer, that can give information
+ * when the visual layer needs it.
  */
-public class LogicHandler
+public class LogicHandler extends AccountList
 {
     private static final String FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
     private AccountList accountList;
     private KeyGen keyGen = new KeyGen();
     private Key key;
-    private Encrypter encrypter = new Encrypter();
     private Decrypter decrypter = new Decrypter();
 
     public LogicHandler() throws NoSuchPaddingException, NoSuchAlgorithmException {
@@ -57,7 +57,7 @@ public class LogicHandler
     {
         switch (buttonOption) {
             case ADD:
-                //accountList.addAccount(key);
+                accountList.addAccount(key, newUsername, newPassword);
                 break;
             case REMOVE:
                 accountList.removeAccount(account);

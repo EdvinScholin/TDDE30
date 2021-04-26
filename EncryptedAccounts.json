@@ -1,7 +1,7 @@
 {
   "listOfEncryptedAccounts": [
     {
-      "username": "YESBOX",
+      "username": "edaa",
       "password": [
         2,
         -103,
@@ -38,7 +38,7 @@
       ]
     },
     {
-      "username": "Account1",
+      "username": "les\u0027 go",
       "password": [
         2,
         -103,
@@ -75,7 +75,7 @@
       ]
     },
     {
-      "username": "Account2",
+      "username": "YESSIRRRRR",
       "password": [
         2,
         -103,
@@ -112,7 +112,7 @@
       ]
     },
     {
-      "username": "Account3",
+      "username": "sheeeesh",
       "password": [
         2,
         -103,
@@ -149,7 +149,7 @@
       ]
     },
     {
-      "username": "Account4",
+      "username": "shiiii",
       "password": [
         2,
         -103,
@@ -701,43 +701,6 @@
         10,
         -11,
         55
-      ]
-    },
-    {
-      "username": "Account19",
-      "password": [
-        2,
-        -103,
-        24,
-        53,
-        -55,
-        113,
-        54,
-        70,
-        61,
-        30,
-        -24,
-        -89,
-        -15,
-        36,
-        -123,
-        4,
-        -29,
-        -99,
-        -120,
-        24,
-        -73,
-        -106,
-        -63,
-        -25,
-        37,
-        -68,
-        61,
-        -113,
-        -100,
-        -7,
-        -75,
-        102
       ]
     }
   ]

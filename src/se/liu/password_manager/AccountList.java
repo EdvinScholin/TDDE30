@@ -25,21 +25,20 @@ public class AccountList
 {
     private List<Account> listOfEncryptedAccounts = new ArrayList<>();
     private static final String FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
-//
-//    public void addAccount(Key key)
-//            throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
-//            InvalidKeyException
-//    {
-//        System.out.println(key);
-//        String username = askUserAboutAccount("Username:");
-//        String password = askUserAboutAccount("Password:");
-//        Account account = new Account(username, password, key);
-//        listOfEncryptedAccounts.add(account);
-//        saveOnFile();
-//    }
 
-    public void removeAccount(Account account) {
+    public void addAccount(Key key, String username, String password)
+            throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
+            InvalidKeyException
+    {
+        System.out.println(key);
+        Account account = new Account(username, password, key);
+        listOfEncryptedAccounts.add(account);
+        saveOnFile();
+    }
+
+    public void removeAccount(Account account) throws FileNotFoundException {
         listOfEncryptedAccounts.remove(account);
+        saveOnFile();
     }
 
     public void saveOnFile() throws FileNotFoundException {
