@@ -1,17 +1,6 @@
 package se.liu.password_manager;
 
-import com.google.gson.Gson;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.security.InvalidKeyException;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -22,7 +11,7 @@ public class PasswordManager
 {
     private PasswordManagerViewer pMV;
 
-    public PasswordManager() throws NoSuchAlgorithmException, NoSuchPaddingException {
+    public PasswordManager() {
         this.pMV = new PasswordManagerViewer();
     }
 
@@ -32,12 +21,7 @@ public class PasswordManager
 
     public static void main(String[] args)
     {
-        PasswordManager pMT = null;
-        try {
-            pMT = new PasswordManager();
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-            e.printStackTrace();
-        }
+       PasswordManager pMT = new PasswordManager();
 
         try {
             pMT.startManager();

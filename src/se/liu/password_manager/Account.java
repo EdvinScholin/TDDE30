@@ -17,12 +17,12 @@ public class Account
     private String username;
     private byte[] password;
 
-    public Account(final String userName, final String plainPassword, final Key key)
+    public Account(final String userName, final byte[] plainPassword, final Key key)
             throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException
     {
         this.username = userName;
         Encrypter encrypter = new Encrypter();
-        this.password = encrypter.encryptPassword(plainPassword, key);
+        this.password = encrypter.cryptoPassword(plainPassword, key);
     }
 
     public String getUsername() {
@@ -34,11 +34,11 @@ public class Account
     }
 
     // Ska vi ha det här här?
-    public void editPassword(String newPassword, Key key)
+    public void editPassword(byte[] newPassword, Key key)
             throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException
     {
         Encrypter encrypter = new Encrypter(); // Har den här för att inte den ska sparas i json-filen
-        password = encrypter.encryptPassword(newPassword, key);
+        password = encrypter.cryptoPassword(newPassword, key);
     }
 
     public void editUsername(String newUsername) {

@@ -1,13 +1,12 @@
 package se.liu.password_manager;
 
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import java.security.InvalidKeyException;
+import java.security.Key;
+
 public interface CrypthographyManager
 {
-    /*
-    String password = "Hello";
-    KeyGenerator kg = KeyGenerator.getInstance("AES");
-    Key key = kg.generateKey();
-    Cipher cipher = Cipher.getInstance("AES");
-
-     */
+    public byte[] cryptoPassword(byte[] password, Key key) throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException;
 }

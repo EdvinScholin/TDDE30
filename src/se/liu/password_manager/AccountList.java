@@ -31,7 +31,8 @@ public class AccountList
             InvalidKeyException
     {
         System.out.println(key);
-        Account account = new Account(username, password, key);
+        byte[] bytePassword = password.getBytes();
+        Account account = new Account(username, bytePassword, key);
         listOfEncryptedAccounts.add(account);
         saveOnFile();
     }
@@ -56,8 +57,10 @@ public class AccountList
             throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, FileNotFoundException, NoSuchPaddingException,
             NoSuchAlgorithmException
     {
+        byte[] bytePassword = newPassword.getBytes();
+
         if (newUsername == null && newPassword != null) {
-            account.editPassword(newPassword, key);
+            account.editPassword(bytePassword, key);
             saveOnFile();
         }
         if (newUsername != null && newPassword == null) {
@@ -66,7 +69,7 @@ public class AccountList
         }
         if (newUsername != null && newPassword != null) {
             account.editUsername(newUsername);
-            account.editPassword(newPassword, key);
+            account.editPassword(bytePassword, key);
             saveOnFile();
         }
     }

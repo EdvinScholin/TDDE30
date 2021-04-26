@@ -19,7 +19,7 @@ import java.security.NoSuchAlgorithmException;
  * This is a medium between the visual layer and the logical layer, that can give information
  * when the visual layer needs it.
  */
-public class LogicHandler extends AccountList
+public class LogicHandler
 {
     private static final String FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
     private AccountList accountList;
