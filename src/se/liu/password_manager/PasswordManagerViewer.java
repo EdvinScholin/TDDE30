@@ -28,12 +28,12 @@ public class PasswordManagerViewer
     private JButton buttonAdd = null, buttonRemove = null, buttonEdit = null;
 
     public void show() throws NoSuchPaddingException, NoSuchAlgorithmException {
-        initializeFrame();
-        initializeLogicHandler();
+        initFrame();
+        initLogicHandler();
 
         addJButtons();
         setJList();
-        initializeLabel();
+        initLabel();
 
         addListeners();
 
@@ -41,14 +41,14 @@ public class PasswordManagerViewer
         frame.setVisible(true);
     }
 
-    private void initializeFrame() {
+    private void initFrame() {
         frame = new JFrame("Password Manager");
         frame.setLayout(new MigLayout("", "[grow][grow][grow]", "[][grow]"));
-        frame.setSize(500, 500);
+        frame.setLocation(960-250, 540-250);
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
     }
 
-    private void initializeLogicHandler() throws NoSuchPaddingException, NoSuchAlgorithmException {
+    private void initLogicHandler() throws NoSuchPaddingException, NoSuchAlgorithmException {
         logicHandler = new LogicHandler();
     }
 
@@ -58,7 +58,7 @@ public class PasswordManagerViewer
         frame.add(jScrollPane, "span 2, grow");
     }
 
-    private void initializeLabel() {
+    private void initLabel() {
         label = new JLabel(selectedAccount().getUsername());
         label.setVerticalAlignment(JLabel.TOP);
         Border border = BorderFactory.createLineBorder(Color.ORANGE);

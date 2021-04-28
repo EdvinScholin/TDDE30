@@ -8,15 +8,17 @@ import java.security.NoSuchAlgorithmException;
  * Acting as start up and window managaer for the main program.
  */
 
-public class PasswordManager implements LoginListener
+public class PasswordManager implements LoginListener, WelcomeListener
 {
     private PasswordManagerViewer pMV;
     private LoginWindow loginWindow;
+    private WelcomeWindow welcomeWindow;
     private static final String FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
 
     public PasswordManager() {
         this.pMV = new PasswordManagerViewer();
         this.loginWindow = new LoginWindow();
+        this.welcomeWindow = new WelcomeWindow();
     }
 
     private void initManager() {
@@ -30,16 +32,18 @@ public class PasswordManager implements LoginListener
 
     private boolean isFirstTimeStartup() {
         File acclist = new File(FILE_NAME);
-        return !acclist.exists();
+        return acclist.exists();
     }
 
     private void doFirstTimeStartup() {
-        WelcomeWindow welcomeWindow = new WelcomeWindow();
+        welcomeWindow.setWelcomeListener(this);
         welcomeWindow.show();
     }
 
-    private void startManager() throws NoSuchPaddingException, NoSuchAlgorithmException {
-        pMV.show();
+    public void registrationAttempted() {
+        if (welcomeWindow.isPasswordsMatched()) {
+            startLoginWindow();
+        }
     }
 
     private void startLoginWindow() {
@@ -57,6 +61,9 @@ public class PasswordManager implements LoginListener
         }
     }
 
+    private void startManager() throws NoSuchPaddingException, NoSuchAlgorithmException {
+        pMV.show();
+    }
 
 
     public static void main(String[] args)

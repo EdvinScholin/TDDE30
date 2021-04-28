@@ -71,4 +71,8 @@ public class LogicHandler
     public AccountList getAccountList() {
         return accountList;
     }
+
+    public void savePasswordHash(String masterPassword) {
+
+    }
 }

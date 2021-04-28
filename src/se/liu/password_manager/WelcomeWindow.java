@@ -7,13 +7,14 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.Arrays;
 
-public class WelcomeWindow
+public class WelcomeWindow implements VisualFrame
 {
     private JFrame frame = null;
-    private JLabel welcomeText = null, welcomeMan = null, labelPassword1 = null, labelPassword2 = null;
     private JPasswordField passwordField1 = null, passwordField2 = null;
     private JButton continueButton = null;
     private static final String FILE_NAME = "resources" + File.separator + "images" + File.separator + "welcome_man.png";
+    private boolean passwordsMatched = false;
+    private WelcomeListener welcomeListener = null;
 
 
     public void show() {
@@ -23,7 +24,6 @@ public class WelcomeWindow
 	initPasswordfield();
 	initButton();
 	addListeners();
-
 
 	frame.pack();
 	frame.setVisible(true);
@@ -41,23 +41,24 @@ public class WelcomeWindow
 
     private void initText(){
         //welcomeText = new JLabel("<html>Welcome new user!<br>Enter a masterpassword below to<br>begin saving all your passwords.<html>");
-	welcomeText = new JLabel("<html>Howdy new user!<br>Enter a masterpassword below to<br>begin saving all your passwords.<html>");
+	JLabel welcomeText =
+		new JLabel("<html>Howdy, new user!<br>Enter a masterpassword below to<br>begin saving all your passwords.<html>");
         frame.add(welcomeText, "wrap");
     }
 
     private void initWelcomeMan(){
 	ImageIcon iconLogo = new ImageIcon(FILE_NAME);
-	welcomeMan = new JLabel();
+	JLabel welcomeMan = new JLabel();
 	welcomeMan.setIcon(iconLogo);
 	frame.add(welcomeMan, "span 2");
     }
 
     private void initPasswordfield() {
-	labelPassword1 = new JLabel("New masterpassword: ");
+	JLabel labelPassword1 = new JLabel("New masterpassword: ");
 	frame.add(labelPassword1);
 	passwordField1 = new JPasswordField(20);
 	frame.add(passwordField1, "span 2, wrap");
-	labelPassword2 = new JLabel("Confirm password: ");
+	JLabel labelPassword2 = new JLabel("Confirm password: ");
 	frame.add(labelPassword2);
 	passwordField2 = new JPasswordField(20);
 	frame.add(passwordField2, "span 2");
@@ -69,25 +70,23 @@ public class WelcomeWindow
         frame.add(continueButton);
     }
 
-
     private void addListeners() {
-	continueButton.addActionListener(new ContinueAction(ButtonOption.OK));
+	continueButton.addActionListener(new WelcomeAction(ButtonOption.CONTINUE));
     }
 
-
-
-    private class ContinueAction extends AbstractAction
+    private class WelcomeAction extends AbstractAction
     {
 	private final ButtonOption button;
 
-	private ContinueAction(final ButtonOption button) {
+	private WelcomeAction(final ButtonOption button) {
 	    this.button = button;
 	}
 
 	@Override public void actionPerformed(final ActionEvent e) {
-	    if (button == ButtonOption.OK) {
+	    if (button == ButtonOption.CONTINUE) {
 	        if (Arrays.equals(passwordField2.getPassword(), passwordField1.getPassword())) {
-		    JOptionPane.showMessageDialog(frame, "PLACEHOLDER FOR LATER ACTION");
+		    passwordsMatched = true;
+		    notifyListeners();
 		    frame.dispose();
 		}
 	        else {
@@ -99,13 +98,16 @@ public class WelcomeWindow
 	}
     }
 
+    public boolean isPasswordsMatched() {
+	return passwordsMatched;
+    }
 
+    public void setWelcomeListener(WelcomeListener wL) {
+        welcomeListener = wL;
+    }
 
-
-
-    public static void main(String[] args) {
-	WelcomeWindow wW = new WelcomeWindow();
-	wW.show();
+    public void notifyListeners() {
+	welcomeListener.registrationAttempted();
     }
 }
 

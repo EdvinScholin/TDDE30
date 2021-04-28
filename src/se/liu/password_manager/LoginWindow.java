@@ -2,22 +2,24 @@ package se.liu.password_manager;
 
 import net.miginfocom.swing.MigLayout;
 
+import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginWindow
+public class LoginWindow implements VisualFrame
 {
-    private Login login = new Login();
+    private Login login = null;
     private JFrame frame = null;
-    private JLabel labelPassword = null;
     private JPasswordField passwordField = null;
     private JButton buttonLogin = null, buttonQuit = null;
     private boolean successfulLogin = false;
     private List<LoginListener> loginListeners = new ArrayList<>();
 
     public void show() {
+        initLogin();
         initFrame();
         initPasswordfield();
         initButtons();
@@ -27,15 +29,19 @@ public class LoginWindow
         frame.setVisible(true);
     }
 
+    private void initLogin() {
+        login = new Login();
+    }
+
     private void initFrame() {
-        frame = new JFrame("Login");
+        frame = new JFrame("Login to PasswordManager");
         frame.setLayout(new MigLayout("", "[grow][grow]", "[][]"));
-        frame.setSize(1000, 1000);
+        frame.setLocation(960-250, 540-250);
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
     }
 
     private void initPasswordfield() {
-        labelPassword = new JLabel("Password: ");
+        JLabel labelPassword = new JLabel("Password: ");
         frame.add(labelPassword);
         passwordField = new JPasswordField(20);
         frame.add(passwordField, "wrap");
