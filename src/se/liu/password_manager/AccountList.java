@@ -33,7 +33,7 @@ public class AccountList
         System.out.println(key);
         byte[] bytePassword = password.getBytes();
         Account account = new Account(username, bytePassword, key);
-        listOfEncryptedAccounts.add(account);
+        listOfEncryptedAccounts.add(0, account);
         saveOnFile();
     }
 
@@ -57,21 +57,15 @@ public class AccountList
             throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, FileNotFoundException, NoSuchPaddingException,
             NoSuchAlgorithmException
     {
-        byte[] bytePassword = newPassword.getBytes();
+        if (newPassword != null) {
+            byte[] bytePassword = newPassword.getBytes();
+            account.editPassword(bytePassword, key);
+        }
+        if (newUsername != null) {
+            account.editUsername(newUsername);
+        }
 
-        if (newUsername == null && newPassword != null) {
-            account.editPassword(bytePassword, key);
-            saveOnFile();
-        }
-        if (newUsername != null && newPassword == null) {
-            account.editUsername(newUsername);
-            saveOnFile();
-        }
-        if (newUsername != null && newPassword != null) {
-            account.editUsername(newUsername);
-            account.editPassword(bytePassword, key);
-            saveOnFile();
-        }
+        saveOnFile();
     }
 
     public DefaultListModel<String> returnListModel() {

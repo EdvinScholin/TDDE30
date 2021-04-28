@@ -2,5 +2,5 @@ package se.liu.password_manager;
 
 public enum ButtonOption
 {
-    ADD, REMOVE, EDIT
+    ADD, REMOVE, EDIT, LOGIN, QUIT
 }

@@ -8,6 +8,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -30,9 +31,6 @@ public class PasswordManagerViewer
         initializeFrame();
         initializeLogicHandler();
 
-        frame.setLayout(new MigLayout("", "[grow][grow][grow]", "[][grow]"));
-        frame.setSize(500, 500);
-
         addJButtons();
         setJList();
         initializeLabel();
@@ -41,11 +39,13 @@ public class PasswordManagerViewer
 
         frame.pack();
         frame.setVisible(true);
-        frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
     }
 
     private void initializeFrame() {
         frame = new JFrame("Password Manager");
+        frame.setLayout(new MigLayout("", "[grow][grow][grow]", "[][grow]"));
+        frame.setSize(500, 500);
+        frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
     }
 
     private void initializeLogicHandler() throws NoSuchPaddingException, NoSuchAlgorithmException {
@@ -77,9 +77,9 @@ public class PasswordManagerViewer
 
     private void addListeners() {
         jList.addMouseListener(jListMouseListener);
-        buttonAdd.addMouseListener(new ButtonMouseListener(ButtonOption.ADD));
-        buttonRemove.addMouseListener(new ButtonMouseListener(ButtonOption.REMOVE));
-        buttonEdit.addMouseListener(new ButtonMouseListener(ButtonOption.EDIT));
+        buttonAdd.addActionListener(new ButtonAction(ButtonOption.ADD));
+        buttonRemove.addActionListener(new ButtonAction(ButtonOption.REMOVE));
+        buttonEdit.addActionListener(new ButtonAction(ButtonOption.EDIT));
     }
 
     MouseListener jListMouseListener = new MouseAdapter()
@@ -92,16 +92,15 @@ public class PasswordManagerViewer
         }
     };
 
-    private class ButtonMouseListener extends MouseAdapter
+    private class ButtonAction extends AbstractAction
     {
         private final ButtonOption button;
 
-        private ButtonMouseListener(final ButtonOption button) {
+        private ButtonAction(final ButtonOption button) {
             this.button = button;
         }
-        //PROBLEM!! Det enda som är kvar är att namnet inte ändras men i själva beskrivningen ändras namnet.
-        @Override public void mouseClicked(final MouseEvent e) {
-            super.mouseClicked(e);
+
+        @Override public void actionPerformed(final ActionEvent e) {
             String newUsername = null;
             String newPassword = null;
 
@@ -121,7 +120,7 @@ public class PasswordManagerViewer
                     newPassword = askUserAboutAccount("What is your new password?");
                 }
             }
-            else if(button == ButtonOption.ADD) {
+            else if (button == ButtonOption.ADD) {
                     newUsername = askUserAboutAccount("Username:");
                     newPassword = askUserAboutAccount("Password:");
             }
@@ -133,7 +132,7 @@ public class PasswordManagerViewer
                 exception.printStackTrace();
             }
 
-            jScrollPane.updateUI();
+            jList.setModel(logicHandler.getAccountList().returnListModel());
         }
     }
 
