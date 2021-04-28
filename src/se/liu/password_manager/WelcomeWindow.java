@@ -3,18 +3,17 @@ package se.liu.password_manager;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.io.File;
+import java.util.Arrays;
 
 public class WelcomeWindow
 {
     private JFrame frame = null;
-    private JLabel welcomeText = null;
-    private JLabel welcomeMan = null;
-    private JLabel labelPassword1 = null;
-    private JPasswordField passwordField1 = null;
-    private JLabel labelPassword2 = null;
-    private JPasswordField passwordField2 = null;
-    private JButton okButton = null;
-
+    private JLabel welcomeText = null, welcomeMan = null, labelPassword1 = null, labelPassword2 = null;
+    private JPasswordField passwordField1 = null, passwordField2 = null;
+    private JButton continueButton = null;
+    private static final String FILE_NAME = "resources" + File.separator + "images" + File.separator + "welcome_man.png";
 
 
     public void show() {
@@ -23,9 +22,10 @@ public class WelcomeWindow
 	initText();
 	initPasswordfield();
 	initButton();
+	addListeners();
 
 
-	frame.pack(); //om man kommenterar bort denna så blir fönstret vad .setSize säger.
+	frame.pack();
 	frame.setVisible(true);
     }
 
@@ -40,13 +40,13 @@ public class WelcomeWindow
 
 
     private void initText(){
-        //welcomeText = new JLabel("<html>Welcome new user!<br>Enter a masterpassword below to begin saving all your passwords.<html>");
+        //welcomeText = new JLabel("<html>Welcome new user!<br>Enter a masterpassword below to<br>begin saving all your passwords.<html>");
 	welcomeText = new JLabel("<html>Howdy new user!<br>Enter a masterpassword below to<br>begin saving all your passwords.<html>");
         frame.add(welcomeText, "wrap");
     }
 
     private void initWelcomeMan(){
-	ImageIcon iconLogo = new ImageIcon("resources/images/welcome_man.png");
+	ImageIcon iconLogo = new ImageIcon(FILE_NAME);
 	welcomeMan = new JLabel();
 	welcomeMan.setIcon(iconLogo);
 	frame.add(welcomeMan, "span 2");
@@ -65,10 +65,39 @@ public class WelcomeWindow
     }
 
     private void initButton() {
-	okButton = new JButton("OK");
-        frame.add(okButton);
+	continueButton = new JButton("Continue");
+        frame.add(continueButton);
     }
 
+
+    private void addListeners() {
+	continueButton.addActionListener(new ContinueAction(ButtonOption.OK));
+    }
+
+
+
+    private class ContinueAction extends AbstractAction
+    {
+	private final ButtonOption button;
+
+	private ContinueAction(final ButtonOption button) {
+	    this.button = button;
+	}
+
+	@Override public void actionPerformed(final ActionEvent e) {
+	    if (button == ButtonOption.OK) {
+	        if (Arrays.equals(passwordField2.getPassword(), passwordField1.getPassword())) {
+		    JOptionPane.showMessageDialog(frame, "PLACEHOLDER FOR LATER ACTION");
+		    frame.dispose();
+		}
+	        else {
+		    JOptionPane.showMessageDialog(frame, "Passwords do not match");
+		    passwordField2.setText("");
+		}
+
+	    }
+	}
+    }
 
 
 

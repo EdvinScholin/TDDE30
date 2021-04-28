@@ -1,6 +1,7 @@
 package se.liu.password_manager;
 
 import javax.crypto.NoSuchPaddingException;
+import java.io.File;
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -11,10 +12,30 @@ public class PasswordManager implements LoginListener
 {
     private PasswordManagerViewer pMV;
     private LoginWindow loginWindow;
+    private static final String FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
 
     public PasswordManager() {
         this.pMV = new PasswordManagerViewer();
         this.loginWindow = new LoginWindow();
+    }
+
+    private void initManager() {
+        if (isFirstTimeStartup()) {
+            doFirstTimeStartup();
+        }
+        else {
+            startLoginWindow();
+        }
+    }
+
+    private boolean isFirstTimeStartup() {
+        File acclist = new File(FILE_NAME);
+        return !acclist.exists();
+    }
+
+    private void doFirstTimeStartup() {
+        WelcomeWindow welcomeWindow = new WelcomeWindow();
+        welcomeWindow.show();
     }
 
     private void startManager() throws NoSuchPaddingException, NoSuchAlgorithmException {
@@ -41,6 +62,8 @@ public class PasswordManager implements LoginListener
     public static void main(String[] args)
     {
        PasswordManager pMT = new PasswordManager();
-       pMT.startLoginWindow();
+       pMT.initManager();
+        //pMT.startLoginWindow();
+        //System.out.println(pMT.isFirstTimeStartup());
     }
 }
