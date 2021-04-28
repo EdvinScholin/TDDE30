@@ -4,6 +4,8 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginWindow
 {
@@ -12,6 +14,8 @@ public class LoginWindow
     private JLabel labelPassword = null;
     private JPasswordField passwordField = null;
     private JButton buttonLogin = null, buttonQuit = null;
+    private boolean successfulLogin = false;
+    private List<LoginListener> loginListeners = new ArrayList<>();
 
     public void show() {
         initFrame();
@@ -60,7 +64,9 @@ public class LoginWindow
         @Override public void actionPerformed(final ActionEvent e) {
             if (button == ButtonOption.LOGIN) {
                 if (login.authenticateLogin(new String(passwordField.getPassword()))) {
-                    JOptionPane.showMessageDialog(frame, "Correct password");
+                    successfulLogin = true;
+                    notifyListeners();
+                    frame.dispose();
                 }
                 else {
                     JOptionPane.showMessageDialog(frame, "Invalid password");
@@ -70,6 +76,20 @@ public class LoginWindow
             else if (button == ButtonOption.QUIT) {
                 frame.dispose();
             }
+        }
+    }
+
+    public boolean isSuccessfulLogin() {
+        return successfulLogin;
+    }
+
+    public void addLoginListener(LoginListener ll) {
+        loginListeners.add(ll);
+    }
+
+    public void notifyListeners() {
+        for (LoginListener listener : loginListeners) {
+            listener.loginAttempted();
         }
     }
 }

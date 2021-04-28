@@ -4,10 +4,10 @@ import javax.crypto.NoSuchPaddingException;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Test class for password manager.
+ * Acting as start up and window managaer for the main program.
  */
 
-public class PasswordManager
+public class PasswordManager implements LoginListener
 {
     private PasswordManagerViewer pMV;
     private LoginWindow loginWindow;
@@ -22,22 +22,25 @@ public class PasswordManager
     }
 
     private void startLoginWindow() {
+        loginWindow.addLoginListener(this);
         loginWindow.show();
     }
 
+    public void loginAttempted() {
+        if (loginWindow.isSuccessfulLogin()) {
+            try {
+                pMV.show();
+            } catch (NoSuchPaddingException | NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
     public static void main(String[] args)
     {
-
        PasswordManager pMT = new PasswordManager();
-        /*
-        try {
-            pMT.startManager();
-        } catch (NoSuchPaddingException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-
-        */
-
-        pMT.startLoginWindow();
+       pMT.startLoginWindow();
     }
 }
