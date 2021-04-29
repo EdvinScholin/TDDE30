@@ -22,17 +22,17 @@ import java.security.NoSuchAlgorithmException;
 public class LogicHandler
 {
     private static final String FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
-    private AccountList accountList;
+    private AccountList accounts;
     private KeyGen keyGen = new KeyGen();
     private Key key;
     private Decrypter decrypter = new Decrypter();
 
     public LogicHandler() throws NoSuchPaddingException, NoSuchAlgorithmException {
-        this.accountList = readJsonAccountList();
-        this.key = keyFromMasterPassword();
+        this.accounts = readJsonAccountList();
+        this.key = getKeyFromMasterPassword();
     }
 
-    private Key keyFromMasterPassword() {
+    private Key getKeyFromMasterPassword() {
         return keyGen.generateKey();
     }
 
@@ -51,25 +51,25 @@ public class LogicHandler
         }
     }
 
-    public void buttonAction(ButtonOption buttonOption, Account account, String newUsername, String newPassword)
+    public void doButtonAction(ButtonOption buttonOption, Account account, String newUsername, String newPassword)
             throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
             InvalidKeyException
     {
         switch (buttonOption) {
             case ADD:
-                accountList.addAccount(key, newUsername, newPassword);
+                accounts.addAccount(key, newUsername, newPassword);
                 break;
             case REMOVE:
-                accountList.removeAccount(account);
+                accounts.removeAccount(account);
                 break;
             case EDIT:
-                accountList.editAccount(account, key, newUsername, newPassword);
+                accounts.editAccount(account, key, newUsername, newPassword);
                 break;
         }
     }
 
-    public AccountList getAccountList() {
-        return accountList;
+    public AccountList getAccounts() {
+        return accounts;
     }
 
     public void savePasswordHash(String masterPassword) {

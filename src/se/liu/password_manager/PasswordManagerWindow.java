@@ -57,7 +57,7 @@ public class PasswordManagerWindow
     }
 
     private void setJList() {
-        jList = new JList<>(logicHandler.getAccountList().returnListModel());
+        jList = new JList<>(logicHandler.getAccounts().returnListModel());
         JScrollPane jScrollPane = new JScrollPane(jList);
         frame.add(jScrollPane, "span 2, grow");
     }
@@ -136,19 +136,19 @@ public class PasswordManagerWindow
 
             try {
                 if (removeAccount == 0) {
-                    logicHandler.buttonAction(button, getSelectedAccount(), newUsername, newPassword);
+                    logicHandler.doButtonAction(button, getSelectedAccount(), newUsername, newPassword);
                 }
             } catch (FileNotFoundException | IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException
                     | NoSuchAlgorithmException | InvalidKeyException exception) {
                 exception.printStackTrace();
             }
 
-            jList.setModel(logicHandler.getAccountList().returnListModel());
+            jList.setModel(logicHandler.getAccounts().returnListModel());
         }
     }
 
     private Account getSelectedAccount() {
-        return logicHandler.getAccountList().getEncryptedAccount(selectedIndex);
+        return logicHandler.getAccounts().getEncryptedAccount(selectedIndex);
     }
 
     private String askUserAboutAccount(String question) {

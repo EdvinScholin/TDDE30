@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class LoginWindow
 {
-    private Login login = null;
+    private LoginManager login = null;
     private JFrame frame = null;
     private JPasswordField passwordField = null;
     private JButton buttonLogin = null, buttonQuit = null;
@@ -33,7 +33,7 @@ public class LoginWindow
     }
 
     private void initLogin() {
-        login = new Login();
+        login = new LoginManager();
     }
 
     private void initFrame() {

@@ -31,8 +31,8 @@ public class WindowManager implements LoginListener, SetupListener
     }
 
     private boolean isFirstTimeStartup() {
-        File acclist = new File(FILE_NAME);
-        return acclist.exists();
+        File accounts = new File(FILE_NAME);
+        return accounts.exists();
     }
 
     private void doFirstTimeStartup() {
@@ -54,7 +54,7 @@ public class WindowManager implements LoginListener, SetupListener
     public void loginAttempted() {
         if (loginWindow.isSuccessfulLogin()) {
             try {
-                pMV.show();
+                startManager();
             } catch (NoSuchPaddingException | NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
@@ -64,7 +64,6 @@ public class WindowManager implements LoginListener, SetupListener
     private void startManager() throws NoSuchPaddingException, NoSuchAlgorithmException {
         pMV.show();
     }
-
 
     public static void main(String[] args)
     {

@@ -1,6 +1,10 @@
 package se.liu.password_manager;
 
-public class Login
+/**
+ * This class is resposible for the login by authenticating the password.
+ * The class contains the correct password.
+ */
+public class LoginManager
 {
     private String mainPassword = "hej";
 
