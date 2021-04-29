@@ -8,17 +8,17 @@ import java.security.NoSuchAlgorithmException;
  * Acting as start up and window managaer for the main program.
  */
 
-public class PasswordManager implements LoginListener, WelcomeListener
+public class WindowManager implements LoginListener, SetupListener
 {
-    private PasswordManagerViewer pMV;
+    private PasswordManagerWindow pMV;
     private LoginWindow loginWindow;
-    private WelcomeWindow welcomeWindow;
+    private SetupWindow welcomeWindow;
     private static final String FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
 
-    public PasswordManager() {
-        this.pMV = new PasswordManagerViewer();
+    public WindowManager() {
+        this.pMV = new PasswordManagerWindow();
         this.loginWindow = new LoginWindow();
-        this.welcomeWindow = new WelcomeWindow();
+        this.welcomeWindow = new SetupWindow();
     }
 
     private void initManager() {
@@ -68,7 +68,7 @@ public class PasswordManager implements LoginListener, WelcomeListener
 
     public static void main(String[] args)
     {
-       PasswordManager pMT = new PasswordManager();
+       WindowManager pMT = new WindowManager();
        pMT.initManager();
         //pMT.startLoginWindow();
         //System.out.println(pMT.isFirstTimeStartup());

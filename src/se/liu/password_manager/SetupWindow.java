@@ -7,14 +7,14 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.Arrays;
 
-public class WelcomeWindow implements VisualFrame
+public class SetupWindow implements VisualFrame
 {
     private JFrame frame = null;
     private JPasswordField passwordField1 = null, passwordField2 = null;
     private JButton continueButton = null;
     private static final String FILE_NAME = "resources" + File.separator + "images" + File.separator + "welcome_man.png";
     private boolean passwordsMatched = false;
-    private WelcomeListener welcomeListener = null;
+    private SetupListener welcomeListener = null;
 
 
     public void show() {
@@ -102,7 +102,7 @@ public class WelcomeWindow implements VisualFrame
 	return passwordsMatched;
     }
 
-    public void setWelcomeListener(WelcomeListener wL) {
+    public void setWelcomeListener(SetupListener wL) {
         welcomeListener = wL;
     }
 

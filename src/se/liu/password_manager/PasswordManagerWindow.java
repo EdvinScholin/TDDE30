@@ -16,7 +16,7 @@ import java.io.FileNotFoundException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
-public class PasswordManagerViewer
+public class PasswordManagerWindow
 {
     private JFrame frame = null;
     private LogicHandler logicHandler = null;   //En mellanhand till logiska och visuella planet. Vill visuella planet ha information,
