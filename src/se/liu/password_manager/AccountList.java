@@ -70,8 +70,8 @@ public class AccountList
 
     public DefaultListModel<String> returnListModel() {
         DefaultListModel<String> listModel = new DefaultListModel<>();
-        for (Account acc : listOfEncryptedAccounts) {
-            listModel.addElement(acc.getUsername());
+        for (Account account : listOfEncryptedAccounts) {
+            listModel.addElement(account.getUsername());
         }
         return listModel;
         /*

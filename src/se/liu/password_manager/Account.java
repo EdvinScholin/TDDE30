@@ -33,11 +33,10 @@ public class Account
         return password;
     }
 
-    // Ska vi ha det här här?
     public void editPassword(byte[] newPassword, Key key)
             throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException
     {
-        Encrypter encrypter = new Encrypter(); // Har den här för att inte den ska sparas i json-filen
+        Encrypter encrypter = new Encrypter();
         password = encrypter.cryptoPassword(newPassword, key);
     }
 

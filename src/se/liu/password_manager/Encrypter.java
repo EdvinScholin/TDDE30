@@ -13,11 +13,10 @@ import java.security.NoSuchAlgorithmException;
  *  This class is responsible for handling the AES encryption of submitted passwords.
  */
 
-public class Encrypter implements CrypthographyManager
+public class Encrypter extends CrypthographyObject
 {
-    private Cipher cipher = Cipher.getInstance("AES");
-
     public Encrypter() throws NoSuchPaddingException, NoSuchAlgorithmException {
+        super(Cipher.getInstance("AES"));
     }
 
     public byte[] cryptoPassword(byte[] password, Key key) throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException {

@@ -7,6 +7,11 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class controls that only a user with the right password can start the main program and view
+ * the encrypted accounts. If the right password has been submitted, the listeners will be notified
+ * and the program can move on. All components of the frame is intialized in this class.
+ */
 public class LoginWindow
 {
     private Login login = null;
@@ -19,7 +24,7 @@ public class LoginWindow
     public void show() {
         initLogin();
         initFrame();
-        initPasswordfield();
+        initPasswordField();
         initButtons();
         addListeners();
 
@@ -38,7 +43,7 @@ public class LoginWindow
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
     }
 
-    private void initPasswordfield() {
+    private void initPasswordField() {
         JLabel labelPassword = new JLabel("Password: ");
         frame.add(labelPassword);
         passwordField = new JPasswordField(20);

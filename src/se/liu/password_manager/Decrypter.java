@@ -12,11 +12,10 @@ import java.security.NoSuchAlgorithmException;
  * This class is responsible for decrypting passwords with a given algorithm and key.
  */
 
-public class Decrypter implements CrypthographyManager
+public class Decrypter extends CrypthographyObject
 {
-    private Cipher cipher = Cipher.getInstance("AES");
-
     public Decrypter() throws NoSuchPaddingException, NoSuchAlgorithmException {
+        super(Cipher.getInstance("AES"));
     }
 
     public byte[] cryptoPassword(byte[] encryptedPassword, Key key)

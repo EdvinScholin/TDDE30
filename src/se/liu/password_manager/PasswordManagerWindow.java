@@ -16,14 +16,18 @@ import java.io.FileNotFoundException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * A visual class for the main program. This class has inner action classes that help
+ * PasswordMangagerWindow when something happens in the frame. The class contains all components of the frame
+ * and also a pointer to the middle man between the logic layer and the visual layer.
+ */
 public class PasswordManagerWindow
 {
     private JFrame frame = null;
     private LogicHandler logicHandler = null;   //En mellanhand till logiska och visuella planet. Vill visuella planet ha information,
                                                 // frågar den logicHandler.
     private int selectedIndex = 0;
-    private JList jList = null;
-    private JScrollPane jScrollPane = null;
+    private JList<String> jList = null;
     private JLabel label = null;
     private JButton buttonAdd = null, buttonRemove = null, buttonEdit = null;
 
@@ -53,13 +57,13 @@ public class PasswordManagerWindow
     }
 
     private void setJList() {
-        jList = new JList(logicHandler.getAccountList().returnListModel());
-        jScrollPane = new JScrollPane(jList);
+        jList = new JList<>(logicHandler.getAccountList().returnListModel());
+        JScrollPane jScrollPane = new JScrollPane(jList);
         frame.add(jScrollPane, "span 2, grow");
     }
 
     private void initLabel() {
-        label = new JLabel(selectedAccount().getUsername());
+        label = new JLabel(getSelectedAccount().getUsername());
         label.setVerticalAlignment(JLabel.TOP);
         Border border = BorderFactory.createLineBorder(Color.ORANGE);
         label.setBorder(border);
@@ -87,7 +91,7 @@ public class PasswordManagerWindow
         @Override public void mouseClicked(final MouseEvent e) {
             super.mouseClicked(e);
             selectedIndex = jList.getSelectedIndex();
-            Account account = selectedAccount();
+            Account account = getSelectedAccount();
             label.setText(account.getUsername());
         }
     };
@@ -132,7 +136,7 @@ public class PasswordManagerWindow
 
             try {
                 if (removeAccount == 0) {
-                    logicHandler.buttonAction(button, selectedAccount(), newUsername, newPassword);
+                    logicHandler.buttonAction(button, getSelectedAccount(), newUsername, newPassword);
                 }
             } catch (FileNotFoundException | IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException
                     | NoSuchAlgorithmException | InvalidKeyException exception) {
@@ -143,7 +147,7 @@ public class PasswordManagerWindow
         }
     }
 
-    private Account selectedAccount() {
+    private Account getSelectedAccount() {
         return logicHandler.getAccountList().getEncryptedAccount(selectedIndex);
     }
 

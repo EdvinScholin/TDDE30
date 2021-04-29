@@ -7,6 +7,11 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.Arrays;
 
+/**
+ * This class acts as a setup for the main program. The class intializes the main password and
+ * visualizes the setup for the user. Listeners will be notified when a password has been set.
+ * All components of the frame is intialized in this class.
+ */
 public class SetupWindow
 {
     private JFrame frame = null;
@@ -15,13 +20,14 @@ public class SetupWindow
     private static final String FILE_NAME = "resources" + File.separator + "images" + File.separator + "setup_pic.png";
     private boolean passwordsMatched = false;
     private SetupListener setupListener = null;
-
+    private static final int LOCATIONX = 710;
+    private static final int LOCATIONY = 290;
 
     public void show() {
         initFrame();
         initLogo();
 	initText();
-	initPasswordfield();
+	initPasswordField();
 	initButton();
 	addListeners();
 
@@ -29,15 +35,12 @@ public class SetupWindow
 	frame.setVisible(true);
     }
 
-
     private void initFrame() {
         frame = new JFrame("Welcome!");
 	frame.setLayout(new MigLayout("", "[][][][]", "[][][]"));
-	frame.setSize(500, 500);
 	frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
-	frame.setLocation(960-250, 540-250); //för att få fönstert i mitten av en 1920x1080p skärm hehe.
+	frame.setLocation(LOCATIONX, LOCATIONY); //för att få fönstert i mitten av en 1920x1080p skärm hehe.
     }
-
 
     private void initText(){
 	JLabel welcomeText =
@@ -52,7 +55,7 @@ public class SetupWindow
 	frame.add(welcomeMan, "span 2");
     }
 
-    private void initPasswordfield() {
+    private void initPasswordField() {
 	JLabel labelPassword1 = new JLabel("New masterpassword: ");
 	frame.add(labelPassword1);
 	passwordField1 = new JPasswordField(20);
