@@ -103,6 +103,7 @@ public class PasswordManagerWindow
         @Override public void actionPerformed(final ActionEvent e) {
             String newUsername = null;
             String newPassword = null;
+            int removeAccount = 0;
 
             if (button == ButtonOption.EDIT) {
                 String[] options = new String[] {"Edit password", "Edit username", "Edit both"};
@@ -121,12 +122,18 @@ public class PasswordManagerWindow
                 }
             }
             else if (button == ButtonOption.ADD) {
-                    newUsername = askUserAboutAccount("Username:");
-                    newPassword = askUserAboutAccount("Password:");
+                newUsername = askUserAboutAccount("Username:");
+                newPassword = askUserAboutAccount("Password:");
+            }
+
+            else if (button == ButtonOption.REMOVE) {
+                removeAccount = JOptionPane.showConfirmDialog(frame, "Are you sure you want to remove this account?");
             }
 
             try {
-                logicHandler.buttonAction(button, selectedAccount(), newUsername, newPassword);
+                if (removeAccount == 0) {
+                    logicHandler.buttonAction(button, selectedAccount(), newUsername, newPassword);
+                }
             } catch (FileNotFoundException | IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException
                     | NoSuchAlgorithmException | InvalidKeyException exception) {
                 exception.printStackTrace();
@@ -141,6 +148,6 @@ public class PasswordManagerWindow
     }
 
     private String askUserAboutAccount(String question) {
-        return JOptionPane.showInputDialog(null, question);
+        return JOptionPane.showInputDialog(frame, question);
     }
 }

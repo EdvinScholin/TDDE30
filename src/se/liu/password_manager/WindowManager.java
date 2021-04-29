@@ -12,13 +12,13 @@ public class WindowManager implements LoginListener, SetupListener
 {
     private PasswordManagerWindow pMV;
     private LoginWindow loginWindow;
-    private SetupWindow welcomeWindow;
+    private SetupWindow setupWindow;
     private static final String FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
 
     public WindowManager() {
         this.pMV = new PasswordManagerWindow();
         this.loginWindow = new LoginWindow();
-        this.welcomeWindow = new SetupWindow();
+        this.setupWindow = new SetupWindow();
     }
 
     private void initManager() {
@@ -36,12 +36,12 @@ public class WindowManager implements LoginListener, SetupListener
     }
 
     private void doFirstTimeStartup() {
-        welcomeWindow.setWelcomeListener(this);
-        welcomeWindow.show();
+        setupWindow.setSetupListener(this);
+        setupWindow.show();
     }
 
     public void registrationAttempted() {
-        if (welcomeWindow.isPasswordsMatched()) {
+        if (setupWindow.isPasswordsMatched()) {
             startLoginWindow();
         }
     }
@@ -70,7 +70,5 @@ public class WindowManager implements LoginListener, SetupListener
     {
        WindowManager pMT = new WindowManager();
        pMT.initManager();
-        //pMT.startLoginWindow();
-        //System.out.println(pMT.isFirstTimeStartup());
     }
 }

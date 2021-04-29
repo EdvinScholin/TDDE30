@@ -2,14 +2,12 @@ package se.liu.password_manager;
 
 import net.miginfocom.swing.MigLayout;
 
-import javax.crypto.NoSuchPaddingException;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginWindow implements VisualFrame
+public class LoginWindow
 {
     private Login login = null;
     private JFrame frame = null;

@@ -7,19 +7,19 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.Arrays;
 
-public class SetupWindow implements VisualFrame
+public class SetupWindow
 {
     private JFrame frame = null;
     private JPasswordField passwordField1 = null, passwordField2 = null;
     private JButton continueButton = null;
-    private static final String FILE_NAME = "resources" + File.separator + "images" + File.separator + "welcome_man.png";
+    private static final String FILE_NAME = "resources" + File.separator + "images" + File.separator + "setup_pic.png";
     private boolean passwordsMatched = false;
-    private SetupListener welcomeListener = null;
+    private SetupListener setupListener = null;
 
 
     public void show() {
         initFrame();
-        initWelcomeMan();
+        initLogo();
 	initText();
 	initPasswordfield();
 	initButton();
@@ -40,13 +40,12 @@ public class SetupWindow implements VisualFrame
 
 
     private void initText(){
-        //welcomeText = new JLabel("<html>Welcome new user!<br>Enter a masterpassword below to<br>begin saving all your passwords.<html>");
 	JLabel welcomeText =
-		new JLabel("<html>Howdy, new user!<br>Enter a masterpassword below to<br>begin saving all your passwords.<html>");
+		new JLabel("<html>Welcome, new user!<br>Enter a masterpassword below to<br>begin saving all your passwords.<html>");
         frame.add(welcomeText, "wrap");
     }
 
-    private void initWelcomeMan(){
+    private void initLogo(){
 	ImageIcon iconLogo = new ImageIcon(FILE_NAME);
 	JLabel welcomeMan = new JLabel();
 	welcomeMan.setIcon(iconLogo);
@@ -71,14 +70,14 @@ public class SetupWindow implements VisualFrame
     }
 
     private void addListeners() {
-	continueButton.addActionListener(new WelcomeAction(ButtonOption.CONTINUE));
+	continueButton.addActionListener(new SetupAction(ButtonOption.CONTINUE));
     }
 
-    private class WelcomeAction extends AbstractAction
+    private class SetupAction extends AbstractAction
     {
 	private final ButtonOption button;
 
-	private WelcomeAction(final ButtonOption button) {
+	private SetupAction(final ButtonOption button) {
 	    this.button = button;
 	}
 
@@ -102,12 +101,12 @@ public class SetupWindow implements VisualFrame
 	return passwordsMatched;
     }
 
-    public void setWelcomeListener(SetupListener wL) {
-        welcomeListener = wL;
+    public void setSetupListener(SetupListener wL) {
+	setupListener = wL;
     }
 
     public void notifyListeners() {
-	welcomeListener.registrationAttempted();
+	setupListener.registrationAttempted();
     }
 }
 
