@@ -51,7 +51,7 @@ public class WindowManager implements LoginListener, SetupListener
         loginWindow.show();
     }
 
-    public void loginAttempted() {
+    public void loginConfirmed() {
         if (loginWindow.isSuccessfulLogin()) {
             try {
                 startManager();

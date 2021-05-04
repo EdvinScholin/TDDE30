@@ -98,7 +98,7 @@ public class LoginWindow
 
     public void notifyListeners() {
         for (LoginListener listener : loginListeners) {
-            listener.loginAttempted();
+            listener.loginConfirmed();
         }
     }
 }
