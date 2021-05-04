@@ -16,7 +16,7 @@ public class KeyGen
     public KeyGen() throws NoSuchAlgorithmException {
     }
 
-    public Key generateKey() {
+    public Key generateKey(String password) {
         return keyGenerator.generateKey();
     }
 }
