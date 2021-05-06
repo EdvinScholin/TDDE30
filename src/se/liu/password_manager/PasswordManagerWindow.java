@@ -15,6 +15,8 @@ import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A visual class for the main program. This class has inner action classes that help
@@ -29,13 +31,18 @@ public class PasswordManagerWindow
     private int selectedIndex = 0;
     private JList<String> jList = null;
     private JLabel label = null;
-    private JButton buttonAdd = null, buttonRemove = null, buttonEdit = null;
+    private JButton buttonAdd = null, buttonRemove = null, buttonEdit = null, buttonQuit = null, buttonLogin = null, continueButton = null;
+    private List<JButton> jButtons = null;
+    private static final int LOCATIONX = 710;
+    private static final int LOCATIONY = 290;
 
-    public void show() throws NoSuchPaddingException, NoSuchAlgorithmException {
-        initFrame();
+    public void showPasswordManager() throws NoSuchPaddingException, NoSuchAlgorithmException {
+        Window window = Window.PASSWORD_MANAGER;
+
+        initFrame(window);
         initLogicHandler();
 
-        addJButtons();
+        addJButtons(window); // fixat
         setJList();
         initLabel();
 
@@ -45,11 +52,51 @@ public class PasswordManagerWindow
         frame.setVisible(true);
     }
 
-    private void initFrame() {
-        frame = new JFrame("Password Manager");
-        frame.setLayout(new MigLayout("", "[grow][grow][grow]", "[][grow]"));
-        frame.setLocation(960-250, 540-250);
+    public void showLoginWindow() {
+        Window window = Window.LOGIN;
+
+        initLogin();
+        initFrame(window);
+        initPasswordField();
+        addJButtons(window);
+        addListeners();
+
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    public void showSetupWindow() {
+        Window window = Window.SETUP;
+
+        initFrame(window);
+        initLogo();
+        initText();
+        initPasswordField();
+        addJButtons(window);
+        addListeners();
+
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    private void initFrame(Window window) {
+        if (window == Window.PASSWORD_MANAGER) {
+            frame = new JFrame("Password Manager");
+            frame.setLayout(new MigLayout("", "[grow][grow][grow]", "[][grow]"));
+        }
+
+        if (window == Window.LOGIN) {
+            frame = new JFrame("Login to PasswordManager");
+            frame.setLayout(new MigLayout("", "[grow][grow]", "[][]"));
+        }
+
+        if (window == Window.SETUP) {
+            frame = new JFrame("Welcome!");
+            frame.setLayout(new MigLayout("", "[][][][]", "[][][]"));
+        }
+
         frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+        frame.setLocation(LOCATIONX, LOCATIONY);
     }
 
     private void initLogicHandler() throws NoSuchPaddingException, NoSuchAlgorithmException {
@@ -70,20 +117,65 @@ public class PasswordManagerWindow
         frame.add(label, "top, grow");
     }
 
-    private void addJButtons() {
-        buttonAdd = new JButton("Add account");
-        buttonRemove = new JButton("Remove account");
-        buttonEdit = new JButton("Edit account");
-        frame.add(buttonAdd);
-        frame.add(buttonRemove);
-        frame.add(buttonEdit, "wrap");
+    private void addJButtons(Window window) {
+        jButtons = new ArrayList<>();
+
+        if (window == Window.PASSWORD_MANAGER) {
+            buttonAdd = new JButton("Add account");
+            buttonRemove = new JButton("Remove account");
+            buttonEdit = new JButton("Edit account");
+
+            jButtons.add(buttonAdd);
+            jButtons.add(buttonRemove);
+            jButtons.add(buttonEdit);
+
+            frame.add(buttonAdd);
+            frame.add(buttonRemove);
+            frame.add(buttonEdit, "wrap");
+        }
+
+        else if (window == Window.LOGIN) {
+            buttonQuit = new JButton("Quit");
+            buttonLogin = new JButton("Login");
+
+            jButtons.add(buttonQuit);
+            jButtons.add(buttonLogin);
+
+            frame.add(buttonQuit);
+            frame.add(buttonLogin, "wrap");
+        }
+
+        else if (window == Window.SETUP) {
+            continueButton = new JButton("Continue");
+
+            jButtons.add(continueButton);
+
+            frame.add(continueButton);
+        }
+
+        int size = jButtons.size();
+        for (JButton jButton : jButtons) {
+            if (jButton.) // inte klar
+            frame.add(jButton);
+        }
     }
 
-    private void addListeners() {
-        jList.addMouseListener(jListMouseListener);
-        buttonAdd.addActionListener(new ButtonAction(ButtonOption.ADD));
-        buttonRemove.addActionListener(new ButtonAction(ButtonOption.REMOVE));
-        buttonEdit.addActionListener(new ButtonAction(ButtonOption.EDIT));
+    private void addListeners(Window window) {
+        if (window == Window.PASSWORD_MANAGER) {
+            jList.addMouseListener(jListMouseListener);
+            buttonAdd.addActionListener(new ButtonAction(ButtonOption.ADD));
+            buttonRemove.addActionListener(new ButtonAction(ButtonOption.REMOVE));
+            buttonEdit.addActionListener(new ButtonAction(ButtonOption.EDIT));
+        }
+
+        if (window == Window.LOGIN) {
+            buttonLogin.addActionListener(new LoginWindow.LoginAction(ButtonOption.LOGIN)); // Behöver fixa för action klassen,
+            buttonQuit.addActionListener(new LoginWindow.LoginAction(ButtonOption.QUIT));   // göra en public class istället?
+        }
+
+        if (window == Window.SETUP) {
+            continueButton.addActionListener(new SetupWindow.SetupAction(ButtonOption.CONTINUE)); // Behöver fixa för action klassen
+        }
     }
 
     MouseListener jListMouseListener = new MouseAdapter()

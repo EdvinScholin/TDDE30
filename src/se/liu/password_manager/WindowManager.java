@@ -62,7 +62,7 @@ public class WindowManager implements LoginListener, SetupListener
     }
 
     private void startManager() throws NoSuchPaddingException, NoSuchAlgorithmException {
-        pMV.show();
+        pMV.showPasswordManager();
     }
 
     public static void main(String[] args)
