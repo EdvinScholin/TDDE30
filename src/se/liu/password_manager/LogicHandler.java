@@ -7,11 +7,12 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
 
@@ -21,7 +22,8 @@ import java.security.NoSuchAlgorithmException;
  */
 public class LogicHandler
 {
-    private static final String FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
+    private static final String ACCOUNTS_FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
+    private static final String PASSWORD_FILE_NAME = "." + File.separator + "HashedPassword.txt";
     private AccountList accounts;
     private KeyGen keyGen = new KeyGen();
     private Key key;
@@ -32,14 +34,9 @@ public class LogicHandler
         this.key = getKeyFromMasterPassword();
     }
 
-    private Key getKeyFromMasterPassword() {
-        return keyGen.generateKey();
-    }
-
     private AccountList readJsonAccountList() {
-        //System.out.println(key);
         Gson gson = new Gson();
-        try (Reader reader = new FileReader(FILE_NAME)) {
+        try (Reader reader = new FileReader(ACCOUNTS_FILE_NAME)) {
             return gson.fromJson(reader, AccountList.class);
         }
         catch (FileNotFoundException ignored) {
@@ -51,9 +48,18 @@ public class LogicHandler
         }
     }
 
-    public void doButtonAction(ButtonOption buttonOption, Account account, String newUsername, String newPassword)
+    public void saveHashToFile(String password) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException,
+            FileNotFoundException
+    {
+        HashEngine hashEngine = new HashEngine();
+        try (FileOutputStream stream = new FileOutputStream(PASSWORD_FILE_NAME)) {
+            stream.write(hashEngine.generateHash(password));
+        }
+    }
+
+    public void doAccountAction(ButtonOption buttonOption, Account account, String newUsername, String newPassword)
             throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
-            InvalidKeyException
+            InvalidKeyException, InvalidParameterSpecException
     {
         switch (buttonOption) {
             case ADD:
@@ -70,5 +76,11 @@ public class LogicHandler
 
     public AccountList getAccounts() {
         return accounts;
+    }
+
+    public String getAccountPassword(Account account)
+            throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException
+    {
+        return new String(decrypter.cryptoPassword(account.getPassword(), key, account.getIv()));
     }
 }

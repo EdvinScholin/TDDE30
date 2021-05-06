@@ -8,20 +8,16 @@ import java.security.NoSuchAlgorithmException;
  * Acting as start up and window managaer for the main program.
  */
 
-public class WindowManager implements LoginListener, SetupListener
+public class WindowManager
 {
     private PasswordManagerWindow pMV;
-    private LoginWindow loginWindow;
-    private SetupWindow setupWindow;
-    private static final String FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
+    private static final String FILE_NAME = "." + File.separator + "HashedPassword.txt";
 
     public WindowManager() {
         this.pMV = new PasswordManagerWindow();
-        this.loginWindow = new LoginWindow();
-        this.setupWindow = new SetupWindow();
     }
 
-    private void initManager() {
+    private void initManager() throws NoSuchPaddingException, NoSuchAlgorithmException {
         if (isFirstTimeStartup()) {
             doFirstTimeStartup();
         }
@@ -31,43 +27,26 @@ public class WindowManager implements LoginListener, SetupListener
     }
 
     private boolean isFirstTimeStartup() {
-        File accounts = new File(FILE_NAME);
-        return accounts.exists();
+        File hashedPassword = new File(FILE_NAME);
+        return !hashedPassword.exists();
     }
 
-    private void doFirstTimeStartup() {
-        setupWindow.setSetupListener(this);
-        setupWindow.show();
+    private void doFirstTimeStartup() throws NoSuchPaddingException, NoSuchAlgorithmException {
+        pMV.show(Window.SETUP);
     }
 
-    public void registrationAttempted() {
-        if (setupWindow.isPasswordsMatched()) {
-            startLoginWindow();
-        }
-    }
-
-    private void startLoginWindow() {
-        loginWindow.addLoginListener(this);
-        loginWindow.show();
-    }
-
-    public void loginConfirmed() {
-        if (loginWindow.isSuccessfulLogin()) {
-            try {
-                startManager();
-            } catch (NoSuchPaddingException | NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void startManager() throws NoSuchPaddingException, NoSuchAlgorithmException {
-        pMV.showPasswordManager();
+    private void startLoginWindow() throws NoSuchPaddingException, NoSuchAlgorithmException {
+        pMV.show(Window.LOGIN);
     }
 
     public static void main(String[] args)
     {
-       WindowManager pMT = new WindowManager();
-       pMT.initManager();
+       WindowManager windowManager = new WindowManager();
+        try {
+            windowManager.initManager();
+        }
+        catch (NoSuchPaddingException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 }

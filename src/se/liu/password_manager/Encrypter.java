@@ -5,16 +5,18 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.security.InvalidKeyException;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidParameterSpecException;
 
 
 /**
  *  This class is responsible for handling the AES encryption of submitted passwords.
  */
 
-public class Encrypter extends CrypthographyObject
+public class Encrypter
 {
+    Cipher cipher;
+
     public Encrypter() throws NoSuchPaddingException, NoSuchAlgorithmException {
         super(Cipher.getInstance("AES"));
     }

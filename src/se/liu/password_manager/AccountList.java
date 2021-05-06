@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,6 +14,7 @@ import java.io.PrintWriter;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidParameterSpecException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +28,10 @@ public class AccountList
     private List<Account> listOfEncryptedAccounts = new ArrayList<>();
     private static final String FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
 
-    public void addAccount(Key key, String username, String password)
+    public void addAccount(SecretKey key, String username, String password)
             throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
-            InvalidKeyException
+            InvalidKeyException, InvalidParameterSpecException
     {
-        System.out.println(key);
         byte[] bytePassword = password.getBytes();
         Account account = new Account(username, bytePassword, key);
         listOfEncryptedAccounts.add(0, account);
@@ -53,9 +54,9 @@ public class AccountList
         return listOfEncryptedAccounts.get(index);
     }
 
-    public void editAccount(Account account, Key key, String newUsername, String newPassword)
+    public void editAccount(Account account, SecretKey key, String newUsername, String newPassword)
             throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, FileNotFoundException, NoSuchPaddingException,
-            NoSuchAlgorithmException
+            NoSuchAlgorithmException, InvalidParameterSpecException
     {
         if (newPassword != null) {
             byte[] bytePassword = newPassword.getBytes();
