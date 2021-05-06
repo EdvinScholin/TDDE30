@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -14,6 +15,8 @@ import java.io.Reader;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.InvalidParameterSpecException;
 
 
 /**
@@ -26,12 +29,16 @@ public class LogicHandler
     private static final String PASSWORD_FILE_NAME = "." + File.separator + "HashedPassword.txt";
     private AccountList accounts;
     private KeyGen keyGen = new KeyGen();
-    private Key key;
+    private SecretKey key;
     private Decrypter decrypter = new Decrypter();
 
-    public LogicHandler() throws NoSuchPaddingException, NoSuchAlgorithmException {
+    public LogicHandler(String password) throws NoSuchPaddingException, NoSuchAlgorithmException {
         this.accounts = readJsonAccountList();
-        this.key = getKeyFromMasterPassword();
+        try {
+            this.key = keyGen.generateKey(password);
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+        }
     }
 
     private AccountList readJsonAccountList() {

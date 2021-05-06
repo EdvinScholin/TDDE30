@@ -5,6 +5,8 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import java.security.InvalidKeyException;
 import java.security.Key;
+import java.security.spec.InvalidParameterSpecException;
+import javax.crypto.SecretKey;
 
 /**
  * The abstract class for every Crypthography object. Each of these objects has a cryptoPassword method and can use
@@ -18,5 +20,6 @@ public abstract class CrypthographyObject
          this.cipher = cipher;
     }
 
-    abstract byte[] cryptoPassword(byte[] password, Key key) throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException;
+    abstract byte[] cryptoPassword(byte[][] password, SecretKey key) throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException,
+            InvalidParameterSpecException;
 }

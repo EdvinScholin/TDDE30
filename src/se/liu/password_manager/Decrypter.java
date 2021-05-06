@@ -4,6 +4,9 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -17,13 +20,14 @@ public class Decrypter
     Cipher cipher;
 
     public Decrypter() throws NoSuchPaddingException, NoSuchAlgorithmException {
-        super(Cipher.getInstance("AES"));
+        cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
     }
 
-    public byte[] cryptoPassword(byte[] encryptedPassword, Key key)
-	    throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException
+    public byte[] cryptoPassword(byte[] encryptedPassword, SecretKey key, byte[] iv)
+	    throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException
     {
-	cipher.init(Cipher.DECRYPT_MODE, key);
+	cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
+
 	byte[] originalPassword = cipher.doFinal(encryptedPassword);
 	return originalPassword;
     }
