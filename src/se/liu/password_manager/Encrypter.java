@@ -18,11 +18,11 @@ import java.security.spec.InvalidParameterSpecException;
 
 public class Encrypter
 {
-    Cipher cipher;
+    private Cipher cipher;
 
     public Encrypter() throws NoSuchPaddingException, NoSuchAlgorithmException {
-        this.cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-    }
+        this.cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");                   // Detta är inte en showstopper då namnet utgör
+    }										    // vilken algoritm som ska användas.
 
     public byte[][] cryptoPassword(byte[] password, SecretKey key)
             throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidParameterSpecException

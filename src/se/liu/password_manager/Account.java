@@ -16,7 +16,7 @@ import java.security.spec.InvalidParameterSpecException;
 public class Account
 {
     private String username;
-    private byte[] password, iv;
+    private byte[] password, initVector;
 
     public Account(final String userName, final byte[] plainPassword, final SecretKey key)
             throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException,
@@ -26,7 +26,7 @@ public class Account
         byte[][] array = initPassword(plainPassword, key);  // Detta måste vi göra för att om encrypter.cryptoPassword(password, key);
                                                             // körs flera gånger ändras IV:n och kan inte decrypta lösenorden.
         this.password = array[0];
-        this.iv = array[1];
+        this.initVector = array[1];
     }
 
     private byte[][] initPassword(byte[] password, SecretKey key)
@@ -46,8 +46,8 @@ public class Account
         return password;
     }
 
-    public byte[] getIv() {
-        return iv;
+    public byte[] getInitVector() {
+        return initVector;
     }
 
     public void editPassword(byte[] newPassword, SecretKey key)
@@ -57,7 +57,7 @@ public class Account
         Encrypter encrypter = new Encrypter();
         byte[][] array = encrypter.cryptoPassword(newPassword, key);
         password = array[0];
-        iv = array[1];
+        initVector = array[1];
     }
 
     public void editUsername(String newUsername) {

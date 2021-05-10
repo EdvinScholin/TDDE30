@@ -34,7 +34,7 @@ public class PasswordManagerWindow
                                                 // frågar den logicHandler.
     private LoginManager login = null;
     private int selectedIndex = 0;
-    private JList<String> jList = null;
+    private JList<String> accounts = null;
     private JLabel label = null;
     private JPasswordField loginPasswordField = null;
     private JPasswordField setupPasswordField1 = null, setupPasswordField2 = null;
@@ -103,8 +103,8 @@ public class PasswordManagerWindow
     }
 
     private void setJList() {
-        jList = new JList<>(logicHandler.getAccounts().returnListModel());
-        JScrollPane jScrollPane = new JScrollPane(jList);
+        accounts = new JList<>(logicHandler.getAccounts().returnListModel());
+        JScrollPane jScrollPane = new JScrollPane(accounts);
         frame.add(jScrollPane, "span 2, grow");
     }
 
@@ -178,7 +178,7 @@ public class PasswordManagerWindow
 
     private void addListeners(Window window) {
         if (window == Window.PASSWORD_MANAGER) {
-            jList.addMouseListener(jListMouseListener);
+            accounts.addMouseListener(jListMouseListener);
             buttonAdd.addActionListener(new ButtonAction(ButtonOption.ADD));
             buttonRemove.addActionListener(new ButtonAction(ButtonOption.REMOVE));
             buttonEdit.addActionListener(new ButtonAction(ButtonOption.EDIT));
@@ -194,17 +194,17 @@ public class PasswordManagerWindow
         }
     }
 
-    MouseListener jListMouseListener = new MouseAdapter()
+    private MouseListener jListMouseListener = new MouseAdapter()
     {
         @Override public void mouseClicked(final MouseEvent e) {
             super.mouseClicked(e);
-            selectedIndex = jList.getSelectedIndex();
+            selectedIndex = accounts.getSelectedIndex();
             Account account = getSelectedAccount();
             try {
                 label.setText(logicHandler.getAccountPassword(account));
             } catch (IllegalBlockSizeException | BadPaddingException | InvalidKeyException |
-                    InvalidAlgorithmParameterException illegalBlockSizeException) {
-                illegalBlockSizeException.printStackTrace();
+                    InvalidAlgorithmParameterException exception) {
+                exception.printStackTrace();
             }
         }
     };
@@ -221,7 +221,6 @@ public class PasswordManagerWindow
             if (button == ButtonOption.ADD || button == ButtonOption.REMOVE || button == ButtonOption.EDIT) {
                 String newUsername = null;
                 String newPassword = null;
-                int removeAccount = 0;
 
                 if (button == ButtonOption.EDIT) {
                     String[] options = new String[] { "Edit password", "Edit username", "Edit both" };
@@ -243,65 +242,56 @@ public class PasswordManagerWindow
                     newUsername = askUserAboutAccount("Username:");
                     newPassword = askUserAboutAccount("Password:");
                 }
-                else {
-                    removeAccount = JOptionPane.showConfirmDialog(frame, "Are you sure you want to remove this account?");
-                }
 
-                try {
-                    if (removeAccount == 0) {
-                        logicHandler.doAccountAction(button, getSelectedAccount(), newUsername, newPassword);
-                    }
-                    removeAccount = 0;
-                }
-                catch (FileNotFoundException | IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException |
-                        NoSuchAlgorithmException | InvalidKeyException | InvalidParameterSpecException exception) {
-                    exception.printStackTrace();
-                }
+                int editAccountList = JOptionPane.showConfirmDialog(frame, "Are you sure you want to " + button + " this account?");
 
-                jList.setModel(logicHandler.getAccounts().returnListModel());
-            }
-
-            else if (button == ButtonOption.LOGIN) {
-                if (login.authenticateLogin(new String(loginPasswordField.getPassword()))) {
-                    frame.dispose();
+                if (editAccountList == 0) {
                     try {
+                        logicHandler.doAccountAction(button, getSelectedAccount(), newUsername, newPassword);
+                    } catch (FileNotFoundException | IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException |
+                            NoSuchAlgorithmException | InvalidKeyException | InvalidParameterSpecException exception) {
+                        exception.printStackTrace();
+                    }
+                }
+
+                accounts.setModel(logicHandler.getAccounts().returnListModel());
+            }
+            else if (button == ButtonOption.LOGIN) {
+                try {
+                    if (login.authenticateLogin(new String(loginPasswordField.getPassword()))) {
+                        frame.dispose();
                         show(Window.PASSWORD_MANAGER);
                     }
-                    catch (NoSuchPaddingException | NoSuchAlgorithmException noSuchPaddingException) {
-                        noSuchPaddingException.printStackTrace();
+                    else {
+                        JOptionPane.showMessageDialog(frame, "Invalid password");
+                        loginPasswordField.setText("");
                     }
-                }
-                else {
-                    JOptionPane.showMessageDialog(frame, "Invalid password");
-                    loginPasswordField.setText("");
+                } catch (NoSuchAlgorithmException | IOException | InvalidKeySpecException | NoSuchPaddingException exception) {
+                    exception.printStackTrace();
                 }
             }
-
             else if (button == ButtonOption.CONTINUE) {
                 if (Arrays.equals(setupPasswordField2.getPassword(), setupPasswordField1.getPassword())) {
                     frame.dispose();
                     try {
-                        logicHandler = new LogicHandler(new String(setupPasswordField1.getPassword()));
-                        logicHandler.saveHashToFile(new String(setupPasswordField1.getPassword()));
+                        String stringPassword = new String(setupPasswordField1.getPassword());
+                        logicHandler = new LogicHandler(stringPassword);
+                        logicHandler.saveHashToFile(stringPassword);
                         String newUsername = askUserAboutAccount("Username:");
                         String newPassword = askUserAboutAccount("Password:");
                         logicHandler.doAccountAction(ButtonOption.ADD, null, newUsername, newPassword);
                         show(Window.PASSWORD_MANAGER);
-
                     } catch (NoSuchPaddingException | NoSuchAlgorithmException | IOException | InvalidKeySpecException |
                             IllegalBlockSizeException | BadPaddingException | InvalidKeyException | InvalidParameterSpecException
-                            noSuchPaddingException) {
-                        noSuchPaddingException.printStackTrace();
+                            exception) {
+                        exception.printStackTrace();
                     }
-
                 }
                 else {
                     JOptionPane.showMessageDialog(frame, "Passwords do not match");
                     setupPasswordField2.setText("");
                 }
-
             }
-
             else {
                 frame.dispose();
             }

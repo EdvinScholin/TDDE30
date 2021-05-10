@@ -28,15 +28,16 @@ public class LogicHandler
     private static final String ACCOUNTS_FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
     private static final String PASSWORD_FILE_NAME = "." + File.separator + "HashedPassword.txt";
     private AccountList accounts;
-    private KeyGen keyGen = new KeyGen();
-    private SecretKey key;
+    private SecretKey key = null;
     private Decrypter decrypter = new Decrypter();
 
     public LogicHandler(String password) throws NoSuchPaddingException, NoSuchAlgorithmException {
         this.accounts = readJsonAccountList();
         try {
-            this.key = keyGen.generateKey(password);
-        } catch (InvalidKeySpecException e) {
+            KeyDeriver keyDeriver = new KeyDeriver();
+            this.key = keyDeriver.generateKey(password);
+        }
+        catch (InvalidKeySpecException e) {
             e.printStackTrace();
         }
     }
@@ -49,9 +50,9 @@ public class LogicHandler
         catch (FileNotFoundException ignored) {
             return new AccountList();
         }
-        catch (IOException ignored) {
-            //return tryLoadAgain("Could not load HighScores, try again?");
-            return new AccountList();
+        catch (IOException e) {
+            e.printStackTrace();
+            return null;                                                // tryLoadJsonListAgain??
         }
     }
 
@@ -88,6 +89,6 @@ public class LogicHandler
     public String getAccountPassword(Account account)
             throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException
     {
-        return new String(decrypter.cryptoPassword(account.getPassword(), key, account.getIv()));
+        return new String(decrypter.cryptoPassword(account.getPassword(), key, account.getInitVector()));
     }
 }

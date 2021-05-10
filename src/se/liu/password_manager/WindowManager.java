@@ -10,11 +10,11 @@ import java.security.NoSuchAlgorithmException;
 
 public class WindowManager
 {
-    private PasswordManagerWindow pMV;
+    private PasswordManagerWindow window;
     private static final String FILE_NAME = "." + File.separator + "HashedPassword.txt";
 
     public WindowManager() {
-        this.pMV = new PasswordManagerWindow();
+        this.window = new PasswordManagerWindow();
     }
 
     private void initManager() throws NoSuchPaddingException, NoSuchAlgorithmException {
@@ -32,11 +32,11 @@ public class WindowManager
     }
 
     private void doFirstTimeStartup() throws NoSuchPaddingException, NoSuchAlgorithmException {
-        pMV.show(Window.SETUP);
+        window.show(Window.SETUP);
     }
 
     private void startLoginWindow() throws NoSuchPaddingException, NoSuchAlgorithmException {
-        pMV.show(Window.LOGIN);
+        window.show(Window.LOGIN);
     }
 
     public static void main(String[] args)

@@ -14,26 +14,11 @@ import java.util.Arrays;
 public class LoginManager
 {
     private static final String FILE_NAME = "." + File.separator + "HashedPassword.txt";
-    //private String mainPassword = "hej";
     private HashEngine hashEngine = new HashEngine();
 
-    public boolean authenticateLogin(String testedPassword) {
-        byte[] correctPassword = null;
-        byte[] hashedTestedPassword = null;
-
-        try {
-            hashedTestedPassword = getHashFromTestedPassword(testedPassword);
-        }
-        catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            correctPassword = readHashPasswordFile();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+    public boolean authenticateLogin(String testedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+        byte[] hashedTestedPassword = getHashFromTestedPassword(testedPassword);
+        byte[] correctPassword = readHashPasswordFile();
 
         if (Arrays.equals(hashedTestedPassword, correctPassword)) {
             return true;

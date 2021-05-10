@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.security.InvalidKeyException;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidParameterSpecException;
 import java.util.ArrayList;
@@ -75,12 +74,5 @@ public class AccountList
             listModel.addElement(account.getUsername());
         }
         return listModel;
-        /*
-        for (int i = 0; i <20 ; i++) {
-            listModel.addElement("Account" + i);
-        }
-        return listModel;
-
-         */
     }
 }

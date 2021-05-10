@@ -13,17 +13,14 @@ import java.security.spec.KeySpec;
  * master password, used to encrypt and decrypt saved passwords.
  */
 
-public class KeyGen {
-    private byte[] salt;
-
-    public KeyGen() {
-        this.salt = new byte[] {66, 19, 100, 71, -44, -54, -71, -116};
-    }
+public class KeyDeriver
+{
+    private static final byte[] SALT = new byte[] {66, 19, 100, 71, -44, -54, -71, -116};
 
     public SecretKey generateKey(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-	    KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 256);
+	    KeySpec keySpec = new PBEKeySpec(password.toCharArray(), SALT, 65536, 256);
 	    SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-	    byte[] key = factory.generateSecret(spec).getEncoded();
+	    byte[] key = factory.generateSecret(keySpec).getEncoded();
 	    return new SecretKeySpec(key, "AES");
     }
 

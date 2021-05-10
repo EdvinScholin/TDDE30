@@ -8,7 +8,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -17,11 +16,11 @@ import java.security.NoSuchAlgorithmException;
 
 public class Decrypter
 {
-    Cipher cipher;
+    private Cipher cipher;
 
     public Decrypter() throws NoSuchPaddingException, NoSuchAlgorithmException {
-        cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-    }
+        cipher = Cipher.getInstance("AES/CBC/PKCS5Padding"); 				// Detta är inte en showstopper då namnet utgör
+    }											// vilken algoritm som ska användas.
 
     public byte[] cryptoPassword(byte[] encryptedPassword, SecretKey key, byte[] iv)
 	    throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException
