@@ -22,7 +22,7 @@ public class Decrypter
         cipher = Cipher.getInstance("AES/CBC/PKCS5Padding"); 				// Detta är inte en showstopper då namnet utgör
     }											// vilken algoritm som ska användas.
 
-    public byte[] cryptoPassword(byte[] encryptedPassword, SecretKey key, byte[] iv)
+    public byte[] decryptPassword(byte[] encryptedPassword, SecretKey key, byte[] iv)
 	    throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException
     {
 	cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));

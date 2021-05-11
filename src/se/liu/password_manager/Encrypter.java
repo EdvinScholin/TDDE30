@@ -24,7 +24,7 @@ public class Encrypter
         this.cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");                   // Detta är inte en showstopper då namnet utgör
     }										    // vilken algoritm som ska användas.
 
-    public byte[][] cryptoPassword(byte[] password, SecretKey key)
+    public byte[][] encryptPassword(byte[] password, SecretKey key)
             throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidParameterSpecException
     {
         cipher.init(Cipher.ENCRYPT_MODE, key);

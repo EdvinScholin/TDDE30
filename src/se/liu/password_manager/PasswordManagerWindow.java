@@ -199,7 +199,7 @@ public class PasswordManagerWindow
         @Override public void mouseClicked(final MouseEvent e) {
             super.mouseClicked(e);
             selectedIndex = accounts.getSelectedIndex();
-            Account account = getSelectedAccount();
+            StandardAccount account = getSelectedAccount();
             try {
                 label.setText(logicHandler.getAccountPassword(account));
             } catch (IllegalBlockSizeException | BadPaddingException | InvalidKeyException |
@@ -298,7 +298,7 @@ public class PasswordManagerWindow
         }
     }
 
-    private Account getSelectedAccount() {
+    private StandardAccount getSelectedAccount() {
         return logicHandler.getAccounts().getEncryptedAccount(selectedIndex);
     }
 

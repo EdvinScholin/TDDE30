@@ -17,7 +17,7 @@ public class KeyDeriver
 {
     private static final byte[] SALT = new byte[] {66, 19, 100, 71, -44, -54, -71, -116};
 
-    public SecretKey generateKey(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public SecretKey deriveKey(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
 	    KeySpec keySpec = new PBEKeySpec(password.toCharArray(), SALT, 65536, 256);
 	    SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 	    byte[] key = factory.generateSecret(keySpec).getEncoded();

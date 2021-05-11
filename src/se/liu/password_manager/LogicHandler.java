@@ -35,7 +35,7 @@ public class LogicHandler
         this.accounts = readJsonAccountList();
         try {
             KeyDeriver keyDeriver = new KeyDeriver();
-            this.key = keyDeriver.generateKey(password);
+            this.key = keyDeriver.deriveKey(password);
         }
         catch (InvalidKeySpecException e) {
             e.printStackTrace();
@@ -65,7 +65,7 @@ public class LogicHandler
         }
     }
 
-    public void doAccountAction(ButtonOption buttonOption, Account account, String newUsername, String newPassword)
+    public void doAccountAction(ButtonOption buttonOption, StandardAccount account, String newUsername, String newPassword)
             throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
             InvalidKeyException, InvalidParameterSpecException
     {
@@ -86,9 +86,9 @@ public class LogicHandler
         return accounts;
     }
 
-    public String getAccountPassword(Account account)
+    public String getAccountPassword(StandardAccount account)
             throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException
     {
-        return new String(decrypter.cryptoPassword(account.getPassword(), key, account.getInitVector()));
+        return new String(decrypter.decryptPassword(account.getPassword(), key, account.getInitVector()));
     }
 }

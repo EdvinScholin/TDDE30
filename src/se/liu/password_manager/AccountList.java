@@ -24,7 +24,7 @@ import java.util.List;
 
 public class AccountList
 {
-    private List<Account> listOfEncryptedAccounts = new ArrayList<>();
+    private List<Account> encryptedAccounts = new ArrayList<>();
     private static final String FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
 
     public void addAccount(SecretKey key, String username, String password)
@@ -32,13 +32,14 @@ public class AccountList
             InvalidKeyException, InvalidParameterSpecException
     {
         byte[] bytePassword = password.getBytes();
-        Account account = new Account(username, bytePassword, key);
-        listOfEncryptedAccounts.add(0, account);
+        Account account = new StandardAccount(username, bytePassword, key);  // HUr fan ska vi göra?
+
+        encryptedAccounts.add(0, account);
         saveOnFile();
     }
 
     public void removeAccount(Account account) throws FileNotFoundException {
-        listOfEncryptedAccounts.remove(account);
+        encryptedAccounts.remove(account);
         saveOnFile();
     }
 
@@ -49,11 +50,11 @@ public class AccountList
         }
     }
 
-    public Account getEncryptedAccount(int index) {
-        return listOfEncryptedAccounts.get(index);
+    public StandardAccount getEncryptedAccount(int index) {
+        return encryptedAccounts.get(index);
     }
 
-    public void editAccount(Account account, SecretKey key, String newUsername, String newPassword)
+    public void editAccount(StandardAccount account, SecretKey key, String newUsername, String newPassword)
             throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, FileNotFoundException, NoSuchPaddingException,
             NoSuchAlgorithmException, InvalidParameterSpecException
     {
@@ -70,7 +71,7 @@ public class AccountList
 
     public DefaultListModel<String> returnListModel() {
         DefaultListModel<String> listModel = new DefaultListModel<>();
-        for (Account account : listOfEncryptedAccounts) {
+        for (StandardAccount account : encryptedAccounts) {
             listModel.addElement(account.getUsername());
         }
         return listModel;
