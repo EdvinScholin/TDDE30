@@ -27,12 +27,17 @@ public class AccountList
     private List<Account> encryptedAccounts = new ArrayList<>();
     private static final String FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
 
-    public void addAccount(SecretKey key, String username, String password)
+    public void addAccount(SecretKey key, String username, String password, AccountType accountType)
             throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
             InvalidKeyException, InvalidParameterSpecException
     {
         byte[] bytePassword = password.getBytes();
-        Account account = new StandardAccount(username, bytePassword, key);  // HUr fan ska vi göra?
+        Account account = null;
+        switch (accountType) {
+            case STANDARD -> account = new StandardAccount(username, bytePassword, key);
+            case EMAIL -> account = new EmailAccount(username, bytePassword, key);
+            case BANK -> account = new BankAccount(username, bytePassword, key);
+        }
 
         encryptedAccounts.add(0, account);
         saveOnFile();
@@ -50,11 +55,11 @@ public class AccountList
         }
     }
 
-    public StandardAccount getEncryptedAccount(int index) {
+    public Account getEncryptedAccount(int index) {
         return encryptedAccounts.get(index);
     }
 
-    public void editAccount(StandardAccount account, SecretKey key, String newUsername, String newPassword)
+    public void editAccount(Account account, SecretKey key, String newUsername, String newPassword)
             throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, FileNotFoundException, NoSuchPaddingException,
             NoSuchAlgorithmException, InvalidParameterSpecException
     {
@@ -71,7 +76,7 @@ public class AccountList
 
     public DefaultListModel<String> returnListModel() {
         DefaultListModel<String> listModel = new DefaultListModel<>();
-        for (StandardAccount account : encryptedAccounts) {
+        for (Account account : encryptedAccounts) {
             listModel.addElement(account.getUsername());
         }
         return listModel;

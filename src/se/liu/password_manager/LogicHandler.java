@@ -1,6 +1,7 @@
 package se.liu.password_manager;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -43,7 +44,8 @@ public class LogicHandler
     }
 
     private AccountList readJsonAccountList() {
-        Gson gson = new Gson();
+        //Gson gson = new Gson();
+        Gson gson = new GsonBuilder().registerTypeAdapter(Account.class, new InterfaceAdapter<Account>()).create();
         try (Reader reader = new FileReader(ACCOUNTS_FILE_NAME)) {
             return gson.fromJson(reader, AccountList.class);
         }
@@ -65,13 +67,13 @@ public class LogicHandler
         }
     }
 
-    public void doAccountAction(ButtonOption buttonOption, StandardAccount account, String newUsername, String newPassword)
+    public void doAccountAction(ButtonOption buttonOption, Account account, String newUsername, String newPassword, AccountType accountType)
             throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
             InvalidKeyException, InvalidParameterSpecException
     {
         switch (buttonOption) {
             case ADD:
-                accounts.addAccount(key, newUsername, newPassword);
+                accounts.addAccount(key, newUsername, newPassword, accountType);
                 break;
             case REMOVE:
                 accounts.removeAccount(account);
@@ -86,7 +88,7 @@ public class LogicHandler
         return accounts;
     }
 
-    public String getAccountPassword(StandardAccount account)
+    public String getAccountPassword(Account account)
             throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException
     {
         return new String(decrypter.decryptPassword(account.getPassword(), key, account.getInitVector()));

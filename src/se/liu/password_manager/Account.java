@@ -10,9 +10,12 @@ import java.security.spec.InvalidParameterSpecException;
 
 public interface Account
 {
+    /*
     abstract byte[][] initPassword(byte[] password, SecretKey key)
 	    throws NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException,
 	    InvalidParameterSpecException, InvalidKeyException;
+
+     */
 
     abstract byte[] getPassword();
 

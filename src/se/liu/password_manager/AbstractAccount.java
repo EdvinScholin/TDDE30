@@ -24,7 +24,7 @@ public abstract class AbstractAccount implements Account
 	this.initVector = array[1];
     }
 
-    @Override public byte[][] initPassword(byte[] password, SecretKey key)
+    private byte[][] initPassword(byte[] password, SecretKey key)
 	    throws NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException,
 	    InvalidParameterSpecException, InvalidKeyException
     {

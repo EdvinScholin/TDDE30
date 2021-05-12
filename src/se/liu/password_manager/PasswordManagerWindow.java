@@ -199,7 +199,7 @@ public class PasswordManagerWindow
         @Override public void mouseClicked(final MouseEvent e) {
             super.mouseClicked(e);
             selectedIndex = accounts.getSelectedIndex();
-            StandardAccount account = getSelectedAccount();
+            Account account = getSelectedAccount();
             try {
                 label.setText(logicHandler.getAccountPassword(account));
             } catch (IllegalBlockSizeException | BadPaddingException | InvalidKeyException |
@@ -221,6 +221,7 @@ public class PasswordManagerWindow
             if (button == ButtonOption.ADD || button == ButtonOption.REMOVE || button == ButtonOption.EDIT) {
                 String newUsername = null;
                 String newPassword = null;
+                AccountType accountType = null;
 
                 if (button == ButtonOption.EDIT) {
                     String[] options = new String[] { "Edit password", "Edit username", "Edit both" };
@@ -239,15 +240,32 @@ public class PasswordManagerWindow
                     }
                 }
                 else if (button == ButtonOption.ADD) {
-                    newUsername = askUserAboutAccount("Username:");
-                    newPassword = askUserAboutAccount("Password:");
+                    String[] options = new String[] { "Standard", "Email", "Bank" };
+                    int response = JOptionPane.showOptionDialog(null, "What type of account do you want to add?",
+                                                                "Options", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                                                                null, options, options[0]);
+                    if (response == 0) {
+                        newUsername = askUserAboutAccount("Username:");
+                        newPassword = askUserAboutAccount("Password:");
+                        accountType = AccountType.STANDARD;
+                    }
+                    if (response == 1) {
+                        newUsername = askUserAboutAccount("Email:");
+                        newPassword = askUserAboutAccount("Password:");
+                        accountType = AccountType.EMAIL;
+                    }
+                    if (response == 2) {
+                        newUsername = askUserAboutAccount("Social Security Number:");
+                        newPassword = askUserAboutAccount("Password:");
+                        accountType = AccountType.BANK;
+                    }
                 }
 
                 int editAccountList = JOptionPane.showConfirmDialog(frame, "Are you sure you want to " + button + " this account?");
 
                 if (editAccountList == 0) {
                     try {
-                        logicHandler.doAccountAction(button, getSelectedAccount(), newUsername, newPassword);
+                        logicHandler.doAccountAction(button, getSelectedAccount(), newUsername, newPassword, accountType);
                     } catch (FileNotFoundException | IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException |
                             NoSuchAlgorithmException | InvalidKeyException | InvalidParameterSpecException exception) {
                         exception.printStackTrace();
@@ -279,7 +297,7 @@ public class PasswordManagerWindow
                         logicHandler.saveHashToFile(stringPassword);
                         String newUsername = askUserAboutAccount("Username:");
                         String newPassword = askUserAboutAccount("Password:");
-                        logicHandler.doAccountAction(ButtonOption.ADD, null, newUsername, newPassword);
+                        logicHandler.doAccountAction(ButtonOption.ADD, null, newUsername, newPassword, AccountType.STANDARD);
                         show(Window.PASSWORD_MANAGER);
                     } catch (NoSuchPaddingException | NoSuchAlgorithmException | IOException | InvalidKeySpecException |
                             IllegalBlockSizeException | BadPaddingException | InvalidKeyException | InvalidParameterSpecException
@@ -298,7 +316,7 @@ public class PasswordManagerWindow
         }
     }
 
-    private StandardAccount getSelectedAccount() {
+    private Account getSelectedAccount() {
         return logicHandler.getAccounts().getEncryptedAccount(selectedIndex);
     }
 
