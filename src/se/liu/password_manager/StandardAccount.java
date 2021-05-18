@@ -15,10 +15,16 @@ import java.security.spec.InvalidParameterSpecException;
 
 public class StandardAccount extends AbstractAccount
 {
-    protected StandardAccount(final String userName, final byte[] plainPassword, final SecretKey key)
+    protected StandardAccount(final String userName, final byte[] plainPassword, final SecretKey key, AccountType accountType)
             throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException,
             InvalidParameterSpecException
     {
-        super(userName, plainPassword, key);
+        super(userName, plainPassword, key, accountType);
     }
+
+    protected StandardAccount(final String userName, final byte[] password, final byte[] initVector, AccountType accountType)
+    {
+        super(userName, password, initVector, accountType);
+    }
+
 }

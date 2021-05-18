@@ -243,7 +243,7 @@ public class PasswordManagerWindow
                     String[] options = new String[] { "Standard", "Email", "Bank" };
                     int response = JOptionPane.showOptionDialog(null, "What type of account do you want to add?",
                                                                 "Options", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
-                                                                null, options, options[0]);
+                                                                null, options, -1);
                     if (response == 0) {
                         newUsername = askUserAboutAccount("Username:");
                         newPassword = askUserAboutAccount("Password:");
@@ -259,7 +259,13 @@ public class PasswordManagerWindow
                         newPassword = askUserAboutAccount("Password:");
                         accountType = AccountType.BANK;
                     }
+                    else if (response == -1) {
+                        return;
+                    }
+
                 }
+
+
 
                 int editAccountList = JOptionPane.showConfirmDialog(frame, "Are you sure you want to " + button + " this account?");
 

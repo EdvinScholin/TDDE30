@@ -4,16 +4,18 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.naming.Context;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidParameterSpecException;
 
-public abstract class AbstractAccount implements Account
+public class AbstractAccount implements Account
 {
     protected String username;
     protected byte[] password, initVector;
+    protected AccountType accountType;
 
-    protected AbstractAccount(final String userName, final byte[] plainPassword, final SecretKey key)
+    protected AbstractAccount(final String userName, final byte[] plainPassword, final SecretKey key, AccountType accountType)
 	    throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException,
 	    InvalidParameterSpecException
     {
@@ -22,6 +24,14 @@ public abstract class AbstractAccount implements Account
 								// körs flera gånger ändras IV:n och kan inte decrypta lösenorden.
 	this.password = array[0];
 	this.initVector = array[1];
+	this.accountType = accountType;
+    }
+
+    protected AbstractAccount(final String userName, byte[] password, byte[] initVector, AccountType accountType) {
+        this.username = userName;
+        this.password = password;
+        this.initVector = initVector;
+	this.accountType = accountType;
     }
 
     private byte[][] initPassword(byte[] password, SecretKey key)
@@ -45,6 +55,10 @@ public abstract class AbstractAccount implements Account
 	return initVector;
     }
 
+    @Override public AccountType getAccountType() {
+	return accountType;
+    }
+
     @Override public void editPassword(byte[] newPassword, SecretKey key)
 	    throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException,
 	    InvalidParameterSpecException
@@ -58,4 +72,5 @@ public abstract class AbstractAccount implements Account
     @Override public void editUsername(String newUsername) {
 	username = newUsername;
     }
+
 }

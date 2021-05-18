@@ -23,6 +23,8 @@ public interface Account
 
     abstract byte[] getInitVector();
 
+    abstract AccountType getAccountType();
+
     abstract void editPassword(byte[] newPassword, SecretKey key)
 	    throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException,
 	    InvalidParameterSpecException;

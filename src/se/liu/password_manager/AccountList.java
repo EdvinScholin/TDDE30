@@ -34,9 +34,9 @@ public class AccountList
         byte[] bytePassword = password.getBytes();
         Account account = null;
         switch (accountType) {
-            case STANDARD -> account = new StandardAccount(username, bytePassword, key);
-            case EMAIL -> account = new EmailAccount(username, bytePassword, key);
-            case BANK -> account = new BankAccount(username, bytePassword, key);
+            case STANDARD -> account = new StandardAccount(username, bytePassword, key, accountType);
+            case EMAIL -> account = new EmailAccount(username, bytePassword, key, accountType);
+            case BANK -> account = new BankAccount(username, bytePassword, key, accountType);
         }
 
         encryptedAccounts.add(0, account);
@@ -49,7 +49,11 @@ public class AccountList
     }
 
     public void saveOnFile() throws FileNotFoundException {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        //Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(Account.class, new AccountAdapter());
+        Gson gson = builder.setPrettyPrinting().create();
+
         try (PrintWriter printWriter = new PrintWriter(FILE_NAME)) {
             gson.toJson(this, printWriter);
         }

@@ -1,7 +1,13 @@
 package se.liu.password_manager;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -26,9 +32,17 @@ public class LoginManager
         return false;
     }
 
-    private byte[] readHashPasswordFile() throws IOException {
-        File file = new File(FILE_NAME);
-        return Files.readAllBytes(file.toPath());
+    private byte[] readHashPasswordFile() {
+        Gson gson = new Gson();
+
+        try (Reader reader = new FileReader(FILE_NAME)) {
+            return gson.fromJson(reader, byte[].class);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            return null;                                                // tryLoadJsonListAgain??
+        }
+
     }
 
     private byte[] getHashFromTestedPassword(String testedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {

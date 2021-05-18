@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Reader;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -44,8 +45,10 @@ public class LogicHandler
     }
 
     private AccountList readJsonAccountList() {
-        //Gson gson = new Gson();
-        Gson gson = new GsonBuilder().registerTypeAdapter(Account.class, new InterfaceAdapter<Account>()).create();
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(Account.class, new AccountAdapter());
+        Gson gson = builder.create();
+
         try (Reader reader = new FileReader(ACCOUNTS_FILE_NAME)) {
             return gson.fromJson(reader, AccountList.class);
         }
@@ -61,10 +64,13 @@ public class LogicHandler
     public void saveHashToFile(String password) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException,
             FileNotFoundException
     {
+        Gson gson = new Gson();
         HashEngine hashEngine = new HashEngine();
-        try (FileOutputStream stream = new FileOutputStream(PASSWORD_FILE_NAME)) {
-            stream.write(hashEngine.generateHash(password));
+
+        try (PrintWriter printWriter = new PrintWriter(PASSWORD_FILE_NAME)) {
+            gson.toJson(hashEngine.generateHash(password), printWriter);
         }
+
     }
 
     public void doAccountAction(ButtonOption buttonOption, Account account, String newUsername, String newPassword, AccountType accountType)
