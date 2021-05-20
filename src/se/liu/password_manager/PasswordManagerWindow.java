@@ -218,67 +218,14 @@ public class PasswordManagerWindow
         }
 
         @Override public void actionPerformed(final ActionEvent e) {
-            if (button == ButtonOption.ADD || button == ButtonOption.REMOVE || button == ButtonOption.EDIT) {
-                String newUsername = null;
-                String newPassword = null;
-                AccountType accountType = null;
-
-                if (button == ButtonOption.EDIT) {
-                    String[] options = new String[] { "Edit password", "Edit username", "Edit both" };
-                    int response = JOptionPane.showOptionDialog(null, "What do you want to edit?", "Options",
-                                                                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
-                                                                options, options[0]);
-                    if (response == 0) {
-                        newPassword = askUserAboutAccount("What is your new password?");
-                    }
-                    if (response == 1) {
-                        newUsername = askUserAboutAccount("What is your new username?");
-                    }
-                    if (response == 2) {
-                        newUsername = askUserAboutAccount("What is your new username?");
-                        newPassword = askUserAboutAccount("What is your new password?");
-                    }
-                }
-                else if (button == ButtonOption.ADD) {
-                    String[] options = new String[] { "Standard", "Email", "Bank" };
-                    int response = JOptionPane.showOptionDialog(null, "What type of account do you want to add?",
-                                                                "Options", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
-                                                                null, options, -1);
-                    if (response == 0) {
-                        newUsername = askUserAboutAccount("Username:");
-                        newPassword = askUserAboutAccount("Password:");
-                        accountType = AccountType.STANDARD;
-                    }
-                    if (response == 1) {
-                        newUsername = askUserAboutAccount("Email:");
-                        newPassword = askUserAboutAccount("Password:");
-                        accountType = AccountType.EMAIL;
-                    }
-                    if (response == 2) {
-                        newUsername = askUserAboutAccount("Social Security Number:");
-                        newPassword = askUserAboutAccount("Password:");
-                        accountType = AccountType.BANK;
-                    }
-                    else if (response == -1) {
-                        return;
-                    }
-
-                }
-
-
-
-                int editAccountList = JOptionPane.showConfirmDialog(frame, "Are you sure you want to " + button + " this account?");
-
-                if (editAccountList == 0) {
-                    try {
-                        logicHandler.doAccountAction(button, getSelectedAccount(), newUsername, newPassword, accountType);
-                    } catch (FileNotFoundException | IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException |
-                            NoSuchAlgorithmException | InvalidKeyException | InvalidParameterSpecException exception) {
-                        exception.printStackTrace();
-                    }
-                }
-
-                accounts.setModel(logicHandler.getAccounts().returnListModel());
+            if (button == ButtonOption.ADD) {
+                doAddAction();
+            }
+            else if (button == ButtonOption.EDIT) {
+                doEditAction();
+            }
+            else if (button == ButtonOption.REMOVE) {
+                doRemoveAction();
             }
             else if (button == ButtonOption.LOGIN) {
                 try {
@@ -328,5 +275,165 @@ public class PasswordManagerWindow
 
     private String askUserAboutAccount(String question) {
         return JOptionPane.showInputDialog(frame, question);
+    }
+
+    private void doAddAction() {
+        String newUsername = null;
+        String newPassword = null;
+        AccountType accountType = null;
+
+        String[] options = new String[] { "Standard", "Email", "Bank" };
+        int response = JOptionPane.showOptionDialog(null, "What type of account do you want to add?",
+                                                    "Options", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                                                    null, options, -1);
+        if (response == 0) {
+            newUsername = askUserAboutAccount("Username:");
+            if (newUsername != null) {
+                newPassword = askUserAboutAccount("Password:");
+                accountType = AccountType.STANDARD;
+            }
+
+        }
+        if (response == 1) {
+            newUsername = askUserAboutAccount("Email:");
+            if (newUsername != null) {
+                newPassword = askUserAboutAccount("Password:");
+                accountType = AccountType.EMAIL;
+            }
+        }
+        if (response == 2) {
+            newUsername = askUserAboutAccount("Social Security Number:");
+            if (newUsername != null) {
+                newPassword = askUserAboutAccount("Password:");
+                accountType = AccountType.BANK;
+            }
+        }
+        else if (response == -1) {
+            return;
+        }
+        if (newUsername == null || newPassword == null ) {
+            return;
+        }
+        else if (newUsername.isEmpty() || newPassword.isEmpty()) {
+            JOptionPane.showMessageDialog(frame, "The password or the username can not be empty!",
+                                          "WARNING", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        doAction(ButtonOption.ADD, newUsername, newPassword, accountType);
+    }
+
+    private void doEditAction() {
+        String newUsername = null;
+        String newPassword = null;
+
+        String[] options = new String[] { "Edit password", "Edit username", "Edit both" };
+        int response = JOptionPane.showOptionDialog(frame, "What do you want to edit?", "Options",
+                                                    JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
+                                                    options, -1);
+        if (response == 0) {
+            newPassword = askUserAboutAccount("What is your new password?");
+            if (newPassword == null) {
+                return;
+            }
+            else if (newPassword.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "The password or the username can not be empty!",
+                                              "WARNING", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
+        else if (response == 1) {
+            newUsername = askUserAboutAccount("What is your new username?");
+            if (newUsername == null) {
+                return;
+            }
+            else if (newUsername.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "The password or the username can not be empty!",
+                                             "WARNING", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
+        else if (response == 2) {
+            newUsername = askUserAboutAccount("What is your new username?");
+            if (newUsername != null) {
+                newPassword = askUserAboutAccount("What is your new password?");
+            }
+            if (newPassword == null) {
+                return;
+            }
+            else if (newUsername.isEmpty() || newPassword.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "The password or the username can not be empty!",
+                                              "WARNING", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
+        else {
+            return;
+        }
+
+        doAction(ButtonOption.EDIT, newUsername, newPassword, null);
+
+    }
+
+    private void doRemoveAction() {
+        doAction(ButtonOption.REMOVE, null, null, null);
+        if (accounts.getModel().getSize() == 0) {
+            JOptionPane.showMessageDialog(frame, "No accounts left, create new one",
+                                          "WARNING", JOptionPane.WARNING_MESSAGE);
+            doAddAction();
+        }
+    }
+
+    private void doLoginAction() {
+        try {
+            if (login.authenticateLogin(new String(loginPasswordField.getPassword()))) {
+                frame.dispose();
+                show(Window.PASSWORD_MANAGER);
+            }
+            else {
+                JOptionPane.showMessageDialog(frame, "Invalid password");
+                loginPasswordField.setText("");
+            }
+        } catch (NoSuchAlgorithmException | IOException | InvalidKeySpecException | NoSuchPaddingException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void doContinueAction() {
+        if (Arrays.equals(setupPasswordField2.getPassword(), setupPasswordField1.getPassword())) {
+            frame.dispose();
+            try {
+                String stringPassword = new String(setupPasswordField1.getPassword());
+                logicHandler = new LogicHandler(stringPassword);
+                logicHandler.saveHashToFile(stringPassword);
+                String newUsername = askUserAboutAccount("Username:");
+                String newPassword = askUserAboutAccount("Password:");
+                logicHandler.doAccountAction(ButtonOption.ADD, null, newUsername, newPassword, AccountType.STANDARD);
+                show(Window.PASSWORD_MANAGER);
+            } catch (NoSuchPaddingException | NoSuchAlgorithmException | IOException | InvalidKeySpecException |
+                    IllegalBlockSizeException | BadPaddingException | InvalidKeyException | InvalidParameterSpecException
+                    exception) {
+                exception.printStackTrace();
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(frame, "Passwords do not match");
+            setupPasswordField2.setText("");
+        }
+    }
+
+    private void doAction(ButtonOption button, String newUsername, String newPassword, AccountType accountType) {
+        int editAccountList = JOptionPane.showConfirmDialog(frame, "Are you sure you want to " + button + " this account?");
+
+        if (editAccountList == 0) {
+            try {
+                logicHandler.doAccountAction(button, getSelectedAccount(), newUsername, newPassword, accountType);
+            } catch (FileNotFoundException | IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException |
+                    NoSuchAlgorithmException | InvalidKeyException | InvalidParameterSpecException exception) {
+                exception.printStackTrace();
+            }
+        }
+
+        accounts.setModel(logicHandler.getAccounts().returnListModel());
     }
 }
