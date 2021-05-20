@@ -111,11 +111,15 @@ public class PasswordManagerWindow
     private void initLabel() throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException,
             InvalidAlgorithmParameterException
     {
-        label = new JLabel(logicHandler.getAccountPassword(getSelectedAccount()));
+        label = new JLabel("");
+        if (accounts.getModel().getSize() != 0) {
+            label.setText(logicHandler.getAccountPassword(getSelectedAccount()));
+        }
         label.setVerticalAlignment(JLabel.TOP);
         Border border = BorderFactory.createLineBorder(Color.ORANGE);
         label.setBorder(border);
         frame.add(label, "top, grow");
+
     }
 
     private void initPasswordField(Window window) {
@@ -199,13 +203,16 @@ public class PasswordManagerWindow
         @Override public void mouseClicked(final MouseEvent e) {
             super.mouseClicked(e);
             selectedIndex = accounts.getSelectedIndex();
-            Account account = getSelectedAccount();
-            try {
-                label.setText(logicHandler.getAccountPassword(account));
-            } catch (IllegalBlockSizeException | BadPaddingException | InvalidKeyException |
-                    InvalidAlgorithmParameterException exception) {
-                exception.printStackTrace();
+            if (accounts.getModel().getSize() != 0) {
+                Account account = getSelectedAccount();
+                try {
+                    label.setText(logicHandler.getAccountPassword(account));
+                } catch (IllegalBlockSizeException | BadPaddingException | InvalidKeyException |
+                        InvalidAlgorithmParameterException exception) {
+                    exception.printStackTrace();
+                }
             }
+
         }
     };
 
@@ -348,10 +355,9 @@ public class PasswordManagerWindow
     private void doRemoveAction() {
         doAction(ButtonOption.REMOVE, null, null, null);
         if (accounts.getModel().getSize() == 0) {
-            JOptionPane.showMessageDialog(frame, "No accounts left, create new one",
-                                          "WARNING", JOptionPane.WARNING_MESSAGE);
-            doAddAction();
+            label.setText("");
         }
+
     }
 
     private void doLoginAction() {

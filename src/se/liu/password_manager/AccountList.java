@@ -39,7 +39,13 @@ public class AccountList
             case BANK -> account = new BankAccount(username, bytePassword, key, accountType);
         }
 
-        encryptedAccounts.add(0, account);
+        if (!encryptedAccounts.isEmpty()) {
+            encryptedAccounts.add(0, account);
+        }
+        else {
+            encryptedAccounts.add(account);
+        }
+
         saveOnFile();
     }
 
@@ -60,7 +66,13 @@ public class AccountList
     }
 
     public Account getEncryptedAccount(int index) {
-        return encryptedAccounts.get(index);
+        if (encryptedAccounts.isEmpty()) {
+            return null;
+        }
+        else {
+            return encryptedAccounts.get(index);
+        }
+
     }
 
     public void editAccount(Account account, SecretKey key, String newUsername, String newPassword)
