@@ -228,40 +228,10 @@ public class PasswordManagerWindow
                 doRemoveAction();
             }
             else if (button == ButtonOption.LOGIN) {
-                try {
-                    if (login.authenticateLogin(new String(loginPasswordField.getPassword()))) {
-                        frame.dispose();
-                        show(Window.PASSWORD_MANAGER);
-                    }
-                    else {
-                        JOptionPane.showMessageDialog(frame, "Invalid password");
-                        loginPasswordField.setText("");
-                    }
-                } catch (NoSuchAlgorithmException | IOException | InvalidKeySpecException | NoSuchPaddingException exception) {
-                    exception.printStackTrace();
-                }
+                doLoginAction();
             }
             else if (button == ButtonOption.CONTINUE) {
-                if (Arrays.equals(setupPasswordField2.getPassword(), setupPasswordField1.getPassword())) {
-                    frame.dispose();
-                    try {
-                        String stringPassword = new String(setupPasswordField1.getPassword());
-                        logicHandler = new LogicHandler(stringPassword);
-                        logicHandler.saveHashToFile(stringPassword);
-                        String newUsername = askUserAboutAccount("Username:");
-                        String newPassword = askUserAboutAccount("Password:");
-                        logicHandler.doAccountAction(ButtonOption.ADD, null, newUsername, newPassword, AccountType.STANDARD);
-                        show(Window.PASSWORD_MANAGER);
-                    } catch (NoSuchPaddingException | NoSuchAlgorithmException | IOException | InvalidKeySpecException |
-                            IllegalBlockSizeException | BadPaddingException | InvalidKeyException | InvalidParameterSpecException
-                            exception) {
-                        exception.printStackTrace();
-                    }
-                }
-                else {
-                    JOptionPane.showMessageDialog(frame, "Passwords do not match");
-                    setupPasswordField2.setText("");
-                }
+                doContinueAction();
             }
             else {
                 frame.dispose();

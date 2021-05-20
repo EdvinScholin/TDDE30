@@ -90,6 +90,8 @@ public class LogicHandler
         }
     }
 
+
+
     public AccountList getAccounts() {
         return accounts;
     }
