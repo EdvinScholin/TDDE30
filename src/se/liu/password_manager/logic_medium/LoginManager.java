@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 /**
  * This class is resposible for the login by authenticating the password.
- * The class contains the correct password.
+ * The class reads the correct password hash from a file and compares it to the users inputted password.
  */
 
 public class LoginManager
@@ -40,11 +40,12 @@ public class LoginManager
         Gson gson = new Gson();
 
         try (Reader reader = new FileReader(FILE_NAME)) {
-            return gson.fromJson(reader, byte[].class);
+            return gson.fromJson(reader, byte[][].class);
+
         }
     }
 
-    private byte[] getHashFromTestedPassword(String testedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        return hashEngine.generateHash(testedPassword);
+    private byte[] getHashFromTestedPassword(String testedPassword, byte[] hashSalt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return hashEngine.generateHash(testedPassword, hashSalt);
     }
 }

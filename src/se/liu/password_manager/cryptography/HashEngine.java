@@ -2,6 +2,7 @@ package se.liu.password_manager.cryptography;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
@@ -13,11 +14,11 @@ import java.security.spec.KeySpec;
 
 public class HashEngine
 {
-    private static final byte[] SALT = new byte[] {-64, 105, 16, -52, 88, 109, 3, 57, -79, 46, -58, 125, 101, -19, -81, -108};
+    private static final String HASHING_ALGORITHM = "PBKDF2WithHmacSHA1";
 
-    public byte[] generateHash(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        KeySpec specification = new PBEKeySpec(password.toCharArray(), SALT, 65536, 128);
-        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+    public byte[] generateHash(String password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        KeySpec specification = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
+        SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(HASHING_ALGORITHM);
         byte[] hash = keyFactory.generateSecret(specification).getEncoded();
         return hash;
     }

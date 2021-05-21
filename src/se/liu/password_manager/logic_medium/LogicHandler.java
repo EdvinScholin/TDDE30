@@ -24,6 +24,7 @@ import java.io.Reader;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
 
@@ -39,7 +40,9 @@ public class LogicHandler
     private static final String PASSWORD_FILE_NAME = "." + File.separator + "HashedPassword.txt";
     private AccountList accounts;
     private SecretKey key = null;
-    private Decrypter decrypter = new Decrypter();
+    private Decrypter decrypter = null;
+    private byte[] hashSalt = null;
+    private byte[] derivationSalt = null;
 
     public LogicHandler(String password) {
         try {
@@ -52,7 +55,7 @@ public class LogicHandler
 
         try {
             KeyDeriver keyDeriver = new KeyDeriver();
-            this.key = keyDeriver.deriveKey(password);
+            this.key = keyDeriver.deriveKey(password, derivationSalt);
         }
         catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -87,11 +90,20 @@ public class LogicHandler
     {
         Gson gson = new Gson();
         HashEngine hashEngine = new HashEngine();
+        byte[][] list = {hashEngine.generateHash(password, hashSalt), hashSalt, derivationSalt};
 
         try (PrintWriter printWriter = new PrintWriter(PASSWORD_FILE_NAME)) {
-            gson.toJson(hashEngine.generateHash(password), printWriter);
+            gson.toJson(list, printWriter);
         }
     }
+
+    private byte[] generateSalt() {
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[18];
+        random.nextBytes(salt);
+        return salt;
+    }
+
 
     public void doAccountAction(ButtonOption buttonOption, Account account, String newUsername, String newPassword, AccountType accountType)
             throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
@@ -118,5 +130,15 @@ public class LogicHandler
             throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException
     {
         return new String(decrypter.decryptPassword(account.getPassword(), key, account.getInitVector()));
+    }
+
+    private byte[][] readSaltFromFile() throws IOException {
+        Gson gson = new Gson();
+        try (Reader reader = new FileReader(PASSWORD_FILE_NAME)) {
+            byte[][] list = gson.fromJson(reader, byte[][].class);
+            return new byte[][] {list[1], list[2]};
+        } catch (FileNotFoundException ignored) {
+            return new byte[][] {generateSalt(), generateSalt()};
+        }
     }
 }

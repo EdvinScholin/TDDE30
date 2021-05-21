@@ -19,18 +19,19 @@ import java.security.spec.InvalidParameterSpecException;
 public class Encrypter
 {
     private Cipher cipher;
+    private static final String ENCRYPTION_ALGORITHM = "AES/CBC/PKCS5Padding";
 
     public Encrypter() throws NoSuchPaddingException, NoSuchAlgorithmException {
-        this.cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");                   // Detta är inte en showstopper då namnet utgör
-    }										    // vilken algoritm som ska användas.
+        this.cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);         // Detta är inte en showstopper då namnet utgör
+    }										                            // vilken algoritm som ska användas.
 
     public byte[][] encryptPassword(byte[] password, SecretKey key)
             throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidParameterSpecException
     {
         cipher.init(Cipher.ENCRYPT_MODE, key);
         AlgorithmParameters par = cipher.getParameters();
-        byte[] iv = par.getParameterSpec(IvParameterSpec.class).getIV();
+        byte[] initVector = par.getParameterSpec(IvParameterSpec.class).getIV();
         byte[] result = cipher.doFinal(password);
-        return new byte[][] {result, iv};
+        return new byte[][] {result, initVector};
     }
 }

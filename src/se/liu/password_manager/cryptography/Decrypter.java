@@ -1,4 +1,4 @@
-package se.liu.password_manager;
+package se.liu.password_manager.cryptography;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -17,15 +17,16 @@ import java.security.NoSuchAlgorithmException;
 public class Decrypter
 {
     private Cipher cipher;
+    private static final String ENCRYPTION_ALGORITHM = "AES/CBC/PKCS5Padding";
 
     public Decrypter() throws NoSuchPaddingException, NoSuchAlgorithmException {
-        cipher = Cipher.getInstance("AES/CBC/PKCS5Padding"); 				// Detta är inte en showstopper då namnet utgör
-    }											// vilken algoritm som ska användas.
+        cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM); 	// Detta är inte en showstopper då namnet utgör
+    }														// vilken algoritm som ska användas.
 
-    public byte[] decryptPassword(byte[] encryptedPassword, SecretKey key, byte[] iv)
+    public byte[] decryptPassword(byte[] encryptedPassword, SecretKey key, byte[] initVector)
 	    throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException
     {
-	cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(iv));
+	cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(initVector));
 
 	byte[] originalPassword = cipher.doFinal(encryptedPassword);
 	return originalPassword;

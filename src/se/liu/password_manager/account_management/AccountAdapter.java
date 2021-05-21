@@ -26,7 +26,7 @@ public class AccountAdapter extends TypeAdapter<Account>
 	String username = parts[0];
 	byte[] password = gson.fromJson(parts[1], byte[].class);
 	byte[] initVector = gson.fromJson(parts[2], byte[].class);
-	String accountType = parts[3];
+	AccountType accountType = AccountType.valueOf(parts[3]);
 
 	Account account = null;
 	switch (accountType) {
