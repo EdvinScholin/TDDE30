@@ -23,9 +23,4 @@ public class KeyDeriver {
 	    byte[] key = factory.generateSecret(keySpec).getEncoded();
 	    return new SecretKeySpec(key, DERIVING_ALGORITHM);
     }
-
-
-
-
-
 }
