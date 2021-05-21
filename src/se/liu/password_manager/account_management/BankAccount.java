@@ -1,4 +1,4 @@
-package se.liu.password_manager;
+package se.liu.password_manager.account_management;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -8,13 +8,18 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidParameterSpecException;
 
+/**
+ * This class represents the bank account type which contains a social security number (sSN) and an encrypted password.
+ * This class is a subclass to AbstractAccount
+ */
+
 public class BankAccount extends AbstractAccount
 {
-    protected BankAccount(final String ssn, final byte[] plainPassword, final SecretKey key, AccountType accountType)
+    protected BankAccount(final String sSN, final byte[] plainPassword, final SecretKey key, AccountType accountType)
 	    throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException,
 	    InvalidParameterSpecException
     {
-	super(ssn, plainPassword, key, accountType);
+	super(sSN, plainPassword, key, accountType);
     }
 
     protected BankAccount(final String ssn, final byte[] password, final byte[] initVector, AccountType accountType)

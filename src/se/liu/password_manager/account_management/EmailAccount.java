@@ -1,4 +1,4 @@
-package se.liu.password_manager;
+package se.liu.password_manager.account_management;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -7,6 +7,11 @@ import javax.crypto.SecretKey;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidParameterSpecException;
+
+/**
+ * This class represents the email account type which contains an email adress and an encrypted password.
+ * This class is a subclass to AbstractAccount
+ */
 
 public class EmailAccount extends AbstractAccount
 {

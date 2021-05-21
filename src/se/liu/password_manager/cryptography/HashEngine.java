@@ -1,4 +1,4 @@
-package se.liu.password_manager;
+package se.liu.password_manager.cryptography;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;

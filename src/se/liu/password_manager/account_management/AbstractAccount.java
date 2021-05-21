@@ -1,13 +1,22 @@
-package se.liu.password_manager;
+package se.liu.password_manager.account_management;
+
+import se.liu.password_manager.cryptography.Encrypter;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
-import javax.naming.Context;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidParameterSpecException;
+
+/**
+ * The class exists for the purpose of creating a base of all accounts. The class implements Account which is in
+ * great use for creating our different Accounts. There are two constructors for this class, one for when the
+ * user creates an account and the other for retrieving existing accounts from files. The class are able to
+ * share the accounts username, encrypted password initalization vector and account type. There are also
+ * possibilities to change the username and password.
+ */
 
 public class AbstractAccount implements Account
 {

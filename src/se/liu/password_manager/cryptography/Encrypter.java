@@ -1,4 +1,4 @@
-package se.liu.password_manager;
+package se.liu.password_manager.cryptography;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;

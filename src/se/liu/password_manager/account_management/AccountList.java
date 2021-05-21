@@ -1,4 +1,4 @@
-package se.liu.password_manager;
+package se.liu.password_manager.account_management;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -55,7 +55,6 @@ public class AccountList
     }
 
     public void saveOnFile() throws FileNotFoundException {
-        //Gson gson = new GsonBuilder().setPrettyPrinting().create();
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Account.class, new AccountAdapter());
         Gson gson = builder.setPrettyPrinting().create();

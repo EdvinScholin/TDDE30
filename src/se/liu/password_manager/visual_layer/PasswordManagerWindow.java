@@ -1,6 +1,10 @@
-package se.liu.password_manager;
+package se.liu.password_manager.visual_layer;
 
 import net.miginfocom.swing.MigLayout;
+import se.liu.password_manager.account_management.Account;
+import se.liu.password_manager.account_management.AccountType;
+import se.liu.password_manager.logic_medium.LogicHandler;
+import se.liu.password_manager.logic_medium.LoginManager;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -27,11 +31,11 @@ import java.util.Arrays;
  * PasswordMangagerWindow when something happens in the frame. The class contains all components of the frame
  * and also a pointer to the middle man between the logic layer and the visual layer.
  */
+
 public class PasswordManagerWindow
 {
     private JFrame frame = null;
-    private LogicHandler logicHandler = null;   // En mellanhand till logiska och visuella planet. Vill visuella planet ha information,
-                                                // frågar den logicHandler.
+    private LogicHandler logicHandler = null;
     private LoginManager login = null;
     private int selectedIndex = 0;
     private JList<String> accounts = null;
@@ -57,9 +61,9 @@ public class PasswordManagerWindow
             initPasswordField(window);
         }
 
-        addJButtons(window);                           // Har den här ordningen på if-satserna för att
-                                                        // komponenterna ska hamna på rätt plats i fönstret.
-        if (window == Window.PASSWORD_MANAGER) {
+        addButtons(window);                            // The order of when the components is initialized is
+                                                        // important for the purpose of the order in which
+        if (window == Window.PASSWORD_MANAGER) {        // they appear in the window.
             if (logicHandler == null) {
                 logicHandler = new LogicHandler(new String(loginPasswordField.getPassword()));
             }
@@ -154,7 +158,7 @@ public class PasswordManagerWindow
         frame.add(welcomeMan, "span 2");
     }
 
-    private void addJButtons(Window window) {
+    private void addButtons(Window window) {
         if (window == Window.PASSWORD_MANAGER) {
             buttonAdd = new JButton("Add account");
             buttonRemove = new JButton("Remove account");
@@ -189,12 +193,12 @@ public class PasswordManagerWindow
         }
 
         if (window == Window.LOGIN) {
-            buttonLogin.addActionListener(new ButtonAction(ButtonOption.LOGIN)); // Behöver fixa för action klassen,
-            buttonQuit.addActionListener(new ButtonAction(ButtonOption.QUIT));   // göra en public class istället?
+            buttonLogin.addActionListener(new ButtonAction(ButtonOption.LOGIN));
+            buttonQuit.addActionListener(new ButtonAction(ButtonOption.QUIT));
         }
 
         if (window == Window.SETUP) {
-            continueButton.addActionListener(new ButtonAction(ButtonOption.CONTINUE)); // Behöver fixa för action klassen
+            continueButton.addActionListener(new ButtonAction(ButtonOption.CONTINUE));
         }
     }
 
@@ -271,14 +275,14 @@ public class PasswordManagerWindow
             }
 
         }
-        if (response == 1) {
+        else if (response == 1) {
             newUsername = askUserAboutAccount("Email:");
             if (newUsername != null) {
                 newPassword = askUserAboutAccount("Password:");
                 accountType = AccountType.EMAIL;
             }
         }
-        if (response == 2) {
+        else if (response == 2) {
             newUsername = askUserAboutAccount("Social Security Number:");
             if (newUsername != null) {
                 newPassword = askUserAboutAccount("Password:");
@@ -288,6 +292,7 @@ public class PasswordManagerWindow
         else if (response == -1) {
             return;
         }
+
         if (newUsername == null || newPassword == null ) {
             return;
         }
@@ -382,12 +387,8 @@ public class PasswordManagerWindow
                 String stringPassword = new String(setupPasswordField1.getPassword());
                 logicHandler = new LogicHandler(stringPassword);
                 logicHandler.saveHashToFile(stringPassword);
-                String newUsername = askUserAboutAccount("Username:");
-                String newPassword = askUserAboutAccount("Password:");
-                logicHandler.doAccountAction(ButtonOption.ADD, null, newUsername, newPassword, AccountType.STANDARD);
                 show(Window.PASSWORD_MANAGER);
-            } catch (NoSuchPaddingException | NoSuchAlgorithmException | IOException | InvalidKeySpecException |
-                    IllegalBlockSizeException | BadPaddingException | InvalidKeyException | InvalidParameterSpecException
+            } catch (NoSuchPaddingException | NoSuchAlgorithmException | IOException | InvalidKeySpecException
                     exception) {
                 exception.printStackTrace();
             }
@@ -399,9 +400,9 @@ public class PasswordManagerWindow
     }
 
     private void doAction(ButtonOption button, String newUsername, String newPassword, AccountType accountType) {
-        int editAccountList = JOptionPane.showConfirmDialog(frame, "Are you sure you want to " + button + " this account?");
+        int confirmAction = JOptionPane.showConfirmDialog(frame, "Are you sure you want to " + button + " this account?");
 
-        if (editAccountList == 0) {
+        if (confirmAction == 0) {
             try {
                 logicHandler.doAccountAction(button, getSelectedAccount(), newUsername, newPassword, accountType);
             } catch (FileNotFoundException | IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException |

@@ -1,7 +1,15 @@
-package se.liu.password_manager;
+package se.liu.password_manager.logic_medium;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import se.liu.password_manager.account_management.Account;
+import se.liu.password_manager.account_management.AccountAdapter;
+import se.liu.password_manager.account_management.AccountList;
+import se.liu.password_manager.account_management.AccountType;
+import se.liu.password_manager.visual_layer.ButtonOption;
+import se.liu.password_manager.cryptography.Decrypter;
+import se.liu.password_manager.cryptography.HashEngine;
+import se.liu.password_manager.cryptography.KeyDeriver;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -9,7 +17,6 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,6 +32,7 @@ import java.security.spec.InvalidParameterSpecException;
  * This is a medium between the visual layer and the logical layer, that can give information
  * when the visual layer needs it.
  */
+
 public class LogicHandler
 {
     private static final String ACCOUNTS_FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
@@ -33,18 +41,35 @@ public class LogicHandler
     private SecretKey key = null;
     private Decrypter decrypter = new Decrypter();
 
-    public LogicHandler(String password) throws NoSuchPaddingException, NoSuchAlgorithmException {
-        this.accounts = readJsonAccountList();
+    public LogicHandler(String password) {
+        try {
+            this.accounts = readJsonAccountList();
+            this.hashSalt = readSaltFromFile()[0];
+            this.derivationSalt = readSaltFromFile()[1];
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+
         try {
             KeyDeriver keyDeriver = new KeyDeriver();
             this.key = keyDeriver.deriveKey(password);
         }
-        catch (InvalidKeySpecException e) {
+        catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            initDecrypter();
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             e.printStackTrace();
         }
     }
 
-    private AccountList readJsonAccountList() {
+    private void initDecrypter() throws NoSuchAlgorithmException, NoSuchPaddingException {
+        decrypter = new Decrypter();
+    }
+
+    private AccountList readJsonAccountList() throws IOException {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Account.class, new AccountAdapter());
         Gson gson = builder.create();
@@ -54,10 +79,6 @@ public class LogicHandler
         }
         catch (FileNotFoundException ignored) {
             return new AccountList();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            return null;                                                // tryLoadJsonListAgain??
         }
     }
 
@@ -70,7 +91,6 @@ public class LogicHandler
         try (PrintWriter printWriter = new PrintWriter(PASSWORD_FILE_NAME)) {
             gson.toJson(hashEngine.generateHash(password), printWriter);
         }
-
     }
 
     public void doAccountAction(ButtonOption buttonOption, Account account, String newUsername, String newPassword, AccountType accountType)
@@ -89,8 +109,6 @@ public class LogicHandler
                 break;
         }
     }
-
-
 
     public AccountList getAccounts() {
         return accounts;

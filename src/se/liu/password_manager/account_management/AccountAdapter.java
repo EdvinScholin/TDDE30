@@ -1,11 +1,16 @@
-package se.liu.password_manager;
+package se.liu.password_manager.account_management;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
+
 import java.io.IOException;
+
+/**
+ * This class is used by the gson library and defines how gson is supposed to handle Account objects.
+ */
 
 
 public class AccountAdapter extends TypeAdapter<Account>
@@ -25,13 +30,12 @@ public class AccountAdapter extends TypeAdapter<Account>
 
 	Account account = null;
 	switch (accountType) {
-	    case "STANDARD" -> account = new StandardAccount(username, password, initVector, AccountType.STANDARD);
-	    case "EMAIL" -> account = new EmailAccount(username, password, initVector, AccountType.EMAIL);
-	    case "BANK" -> account = new BankAccount(username, password, initVector, AccountType.BANK);
+	    case STANDARD -> account = new StandardAccount(username, password, initVector, AccountType.STANDARD);
+	    case EMAIL -> account = new EmailAccount(username, password, initVector, AccountType.EMAIL);
+	    case BANK -> account = new BankAccount(username, password, initVector, AccountType.BANK);
 	}
 	return account;
     }
-
 
     public void write(JsonWriter writer, Account account) throws IOException {
 	if (account == null) {

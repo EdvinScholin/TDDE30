@@ -1,4 +1,4 @@
-package se.liu.password_manager;
+package se.liu.password_manager.account_management;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -8,9 +8,9 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidParameterSpecException;
 
-/**
- *  Represents an account which contains the encrypted password and the username for said account.
- *  The class is able to change account information.
+/*
+ *  This class represents the standard account type which contains a username and an encrypted password.
+ *  This class is a subclass to AbstractAccount.
  */
 
 public class StandardAccount extends AbstractAccount

@@ -1,4 +1,4 @@
-package se.liu.password_manager;
+package se.liu.password_manager.account_management;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -8,15 +8,13 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidParameterSpecException;
 
+/**
+ * The class enables the AccountList class to add or edit an account without the class knowing the specific account
+ * type. The methods are implemented in all the subclasses.
+ */
+
 public interface Account
 {
-    /*
-    abstract byte[][] initPassword(byte[] password, SecretKey key)
-	    throws NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException,
-	    InvalidParameterSpecException, InvalidKeyException;
-
-     */
-
     abstract byte[] getPassword();
 
     abstract String getUsername();
