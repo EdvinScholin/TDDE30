@@ -293,7 +293,7 @@ public class PasswordManagerWindow
         }
         else if (newUsername.isEmpty() || newPassword.isEmpty()) {
             JOptionPane.showMessageDialog(frame, "The password or the username can not be empty!",
-                                          "WARNING", JOptionPane.WARNING_MESSAGE);
+                                          "ERROR", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -315,7 +315,7 @@ public class PasswordManagerWindow
             }
             else if (newPassword.isEmpty()) {
                 JOptionPane.showMessageDialog(frame, "The password or the username can not be empty!",
-                                              "WARNING", JOptionPane.WARNING_MESSAGE);
+                                              "ERROR", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
@@ -326,7 +326,7 @@ public class PasswordManagerWindow
             }
             else if (newUsername.isEmpty()) {
                 JOptionPane.showMessageDialog(frame, "The password or the username can not be empty!",
-                                             "WARNING", JOptionPane.WARNING_MESSAGE);
+                                              "ERROR", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
@@ -340,7 +340,7 @@ public class PasswordManagerWindow
             }
             else if (newUsername.isEmpty() || newPassword.isEmpty()) {
                 JOptionPane.showMessageDialog(frame, "The password or the username can not be empty!",
-                                              "WARNING", JOptionPane.WARNING_MESSAGE);
+                                              "ERROR", JOptionPane.ERROR_MESSAGE);
                 return;
             }
         }
