@@ -8,9 +8,9 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidParameterSpecException;
 
-/*
- *  This class represents the standard account type which contains a username and an encrypted password.
- *  This class is a subclass to AbstractAccount.
+/**
+ * This class represents the standard account type which contains a username and an encrypted password.
+ * This class is a subclass to AbstractAccount.
  */
 
 public class StandardAccount extends AbstractAccount

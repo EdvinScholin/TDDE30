@@ -47,7 +47,7 @@ public class PasswordManagerWindow
     private static final int LOCATIONY = 290;
     private static final String SETUP_FILE_NAME = "resources" + File.separator + "images" + File.separator + "setup_pic.png";
 
-    public void show(Window window) throws NoSuchPaddingException, NoSuchAlgorithmException {
+    public void show(Window window) {
         initFrame(window);
 
         if (window == Window.LOGIN) {
@@ -376,7 +376,7 @@ public class PasswordManagerWindow
                 JOptionPane.showMessageDialog(frame, "Invalid password");
                 loginPasswordField.setText("");
             }
-        } catch (NoSuchAlgorithmException | IOException | InvalidKeySpecException | NoSuchPaddingException exception) {
+        } catch (NoSuchAlgorithmException | IOException | InvalidKeySpecException exception) {
             exception.printStackTrace();
         }
     }
@@ -395,7 +395,7 @@ public class PasswordManagerWindow
                     logicHandler = new LogicHandler(stringPassword);
                     logicHandler.saveHashToFile(stringPassword);
                     show(Window.PASSWORD_MANAGER);
-                } catch (NoSuchPaddingException | NoSuchAlgorithmException | IOException | InvalidKeySpecException exception) {
+                } catch (NoSuchAlgorithmException | IOException | InvalidKeySpecException exception) {
                     exception.printStackTrace();
                 }
             }

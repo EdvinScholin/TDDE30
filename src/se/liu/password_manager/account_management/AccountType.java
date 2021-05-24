@@ -1,7 +1,7 @@
 package se.liu.password_manager.account_management;
 
 /**
- * States all different types of AccountTypes.
+ * This enum class states all constants for different types of AccountTypes.
  */
 
 public enum AccountType

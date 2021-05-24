@@ -16,7 +16,7 @@ import java.security.spec.KeySpec;
 public class KeyDeriver {
     private static final String HASHING_ALGORITHM = "PBKDF2WithHmacSHA1";
     private static final String DERIVING_ALGORITHM = "AES";
-    private byte[] salt = null;
+    private byte[] salt;
 
     public KeyDeriver(final byte[] salt) {
 	this.salt = salt;

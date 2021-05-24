@@ -38,7 +38,7 @@ public class LogicHandler
 {
     private static final String ACCOUNTS_FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
     private static final String PASSWORD_FILE_NAME = "." + File.separator + "HashedPassword.txt";
-    private AccountList accounts;
+    private AccountList accounts = null;
     private SecretKey key = null;
     private Decrypter decrypter = null;
     private byte[] hashSalt = null;
@@ -90,10 +90,10 @@ public class LogicHandler
     {
         Gson gson = new Gson();
         HashEngine hashEngine = new HashEngine();
-        byte[][] list = {hashEngine.generateHash(password, hashSalt), hashSalt, derivationSalt};
+        byte[][] hashInfo = {hashEngine.generateHash(password, hashSalt), hashSalt, derivationSalt};
 
         try (PrintWriter printWriter = new PrintWriter(PASSWORD_FILE_NAME)) {
-            gson.toJson(list, printWriter);
+            gson.toJson(hashInfo, printWriter);
         }
     }
 
@@ -135,8 +135,8 @@ public class LogicHandler
     private byte[][] readSaltFromFile() throws IOException {
         Gson gson = new Gson();
         try (Reader reader = new FileReader(PASSWORD_FILE_NAME)) {
-            byte[][] list = gson.fromJson(reader, byte[][].class);
-            return new byte[][] {list[1], list[2]};
+            byte[][] salt = gson.fromJson(reader, byte[][].class);
+            return new byte[][] {salt[1], salt[2]};
         } catch (FileNotFoundException ignored) {
             return new byte[][] {generateSalt(), generateSalt()};
         }
