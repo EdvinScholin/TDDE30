@@ -16,8 +16,13 @@ import java.security.spec.KeySpec;
 public class KeyDeriver {
     private static final String HASHING_ALGORITHM = "PBKDF2WithHmacSHA1";
     private static final String DERIVING_ALGORITHM = "AES";
+    private byte[] salt = null;
 
-    public SecretKey deriveKey(String password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public KeyDeriver(final byte[] salt) {
+	this.salt = salt;
+    }
+
+    public SecretKey deriveKey(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
 	    KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, 65536, 256);
 	    SecretKeyFactory factory = SecretKeyFactory.getInstance(HASHING_ALGORITHM);
 	    byte[] key = factory.generateSecret(keySpec).getEncoded();

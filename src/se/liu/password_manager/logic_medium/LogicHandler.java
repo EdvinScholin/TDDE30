@@ -54,8 +54,8 @@ public class LogicHandler
         }
 
         try {
-            KeyDeriver keyDeriver = new KeyDeriver();
-            this.key = keyDeriver.deriveKey(password, derivationSalt);
+            KeyDeriver keyDeriver = new KeyDeriver(derivationSalt);
+            this.key = keyDeriver.deriveKey(password);
         }
         catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
             e.printStackTrace();
