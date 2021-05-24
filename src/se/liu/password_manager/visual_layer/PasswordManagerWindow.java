@@ -120,7 +120,7 @@ public class PasswordManagerWindow
             label.setText(logicHandler.getAccountPassword(getSelectedAccount()));
         }
         label.setVerticalAlignment(JLabel.TOP);
-        Border border = BorderFactory.createLineBorder(Color.ORANGE);
+        Border border = BorderFactory.createLineBorder(Color.GRAY);
         label.setBorder(border);
         frame.add(label, "top, grow");
 
@@ -147,7 +147,8 @@ public class PasswordManagerWindow
 
     private void initText(){
         JLabel welcomeText =
-                new JLabel("<html>Welcome, new user!<br>Enter a masterpassword below to<br>begin saving all your passwords.<html>");
+                new JLabel("<html>Welcome, new user!<br>Enter a masterpassword below to<br>begin saving all your passwords.<br>" +
+                           "The password must be 8 characters or more. <html>");
         frame.add(welcomeText, "wrap");
     }
 
@@ -382,15 +383,21 @@ public class PasswordManagerWindow
 
     private void doContinueAction() {
         if (Arrays.equals(setupPasswordField2.getPassword(), setupPasswordField1.getPassword())) {
-            frame.dispose();
-            try {
-                String stringPassword = new String(setupPasswordField1.getPassword());
-                logicHandler = new LogicHandler(stringPassword);
-                logicHandler.saveHashToFile(stringPassword);
-                show(Window.PASSWORD_MANAGER);
-            } catch (NoSuchPaddingException | NoSuchAlgorithmException | IOException | InvalidKeySpecException
-                    exception) {
-                exception.printStackTrace();
+            if (setupPasswordField1.getPassword().length < 8) {
+                JOptionPane.showMessageDialog(frame, "Password must be 8 characters or more");
+                setupPasswordField1.setText("");
+                setupPasswordField2.setText("");
+            }
+            else {
+                frame.dispose();
+                try {
+                    String stringPassword = new String(setupPasswordField1.getPassword());
+                    logicHandler = new LogicHandler(stringPassword);
+                    logicHandler.saveHashToFile(stringPassword);
+                    show(Window.PASSWORD_MANAGER);
+                } catch (NoSuchPaddingException | NoSuchAlgorithmException | IOException | InvalidKeySpecException exception) {
+                    exception.printStackTrace();
+                }
             }
         }
         else {
