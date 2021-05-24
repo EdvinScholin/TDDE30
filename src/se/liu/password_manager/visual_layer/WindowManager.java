@@ -31,11 +31,11 @@ public class WindowManager
         return !hashedPassword.exists();
     }
 
-    private void doFirstTimeStartup() throws NoSuchPaddingException, NoSuchAlgorithmException {
+    private void doFirstTimeStartup()  {
         window.show(Window.SETUP);
     }
 
-    private void startLoginWindow() throws NoSuchPaddingException, NoSuchAlgorithmException {
+    private void startLoginWindow()  {
         window.show(Window.LOGIN);
     }
 
