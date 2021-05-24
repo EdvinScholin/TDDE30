@@ -36,7 +36,7 @@ public class PasswordManagerWindow
 {
     private JFrame frame = null;
     private LogicHandler logicHandler = null;
-    private LoginManager login = null;
+    private LoginManager loginManager = null;
     private int selectedIndex = 0;
     private JList<String> accounts = null;
     private JLabel label = null;
@@ -51,7 +51,7 @@ public class PasswordManagerWindow
         initFrame(window);
 
         if (window == Window.LOGIN) {
-            login = new LoginManager();
+            loginManager = new LoginManager();
             initPasswordField(window);
         }
 
@@ -65,7 +65,13 @@ public class PasswordManagerWindow
                                                         // important for the purpose of the order in which
         if (window == Window.PASSWORD_MANAGER) {        // they appear in the window.
             if (logicHandler == null) {
-                logicHandler = new LogicHandler(new String(loginPasswordField.getPassword()));
+                try {
+                    logicHandler = new LogicHandler(new String(loginPasswordField.getPassword()));
+                } catch (IOException | NoSuchPaddingException | InvalidKeySpecException | NoSuchAlgorithmException ioException) {
+                    ioException.printStackTrace();
+                    JOptionPane.showMessageDialog(frame, "Logical error, either with file reading or encryption",
+                                                  "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
             }
 
             setJList();
@@ -217,7 +223,6 @@ public class PasswordManagerWindow
                     exception.printStackTrace();
                 }
             }
-
         }
     };
 
@@ -231,19 +236,67 @@ public class PasswordManagerWindow
 
         @Override public void actionPerformed(final ActionEvent e) {
             if (button == ButtonOption.ADD) {
-                doAddAction();
+                try {
+                    doAddAction();
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                    JOptionPane.showMessageDialog(frame, "File with accounts can not be found!",
+                                                  "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (InvalidKeyException | InvalidParameterSpecException | NoSuchAlgorithmException
+                    | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException exception) {
+                    exception.printStackTrace();
+                    JOptionPane.showMessageDialog(frame, "Encryption error!",
+                                                  "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else if (button == ButtonOption.EDIT) {
-                doEditAction();
+                try {
+                    doEditAction();
+                } catch (FileNotFoundException | InvalidKeyException | InvalidParameterSpecException | NoSuchAlgorithmException
+                        | BadPaddingException | NoSuchPaddingException | IllegalBlockSizeException exception) {
+                    exception.printStackTrace();
+                }
             }
             else if (button == ButtonOption.REMOVE) {
-                doRemoveAction();
+                try {
+                    doRemoveAction();
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                    JOptionPane.showMessageDialog(frame, "File with accounts can not be found!",
+                                                  "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
+                catch (InvalidKeyException | InvalidParameterSpecException | NoSuchAlgorithmException
+                    | BadPaddingException | NoSuchPaddingException | IllegalBlockSizeException exception) {
+                    exception.printStackTrace();
+                    JOptionPane.showMessageDialog(frame, "Encryption error!",
+                                                  "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else if (button == ButtonOption.LOGIN) {
-                doLoginAction();
+                try {
+                    doLoginAction();
+                } catch (InvalidKeySpecException | NoSuchAlgorithmException exception) {
+                    exception.printStackTrace();
+                    JOptionPane.showMessageDialog(frame, "Login error!",
+                                                  "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (IOException iOException) {
+                    iOException.printStackTrace();
+                    JOptionPane.showMessageDialog(frame, "File with main password can not be found!",
+                                                  "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else if (button == ButtonOption.CONTINUE) {
-                doContinueAction();
+                try {
+                    doContinueAction();
+                } catch (InvalidKeySpecException | NoSuchAlgorithmException | NoSuchPaddingException exception) {
+                    exception.printStackTrace();
+                    JOptionPane.showMessageDialog(frame, "Login error!",
+                                                  "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (IOException iOException) {
+                    iOException.printStackTrace();
+                    JOptionPane.showMessageDialog(frame, "File with main password can not be created!",
+                                                  "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
             }
             else {
                 frame.dispose();
@@ -259,7 +312,9 @@ public class PasswordManagerWindow
         return JOptionPane.showInputDialog(frame, question);
     }
 
-    private void doAddAction() {
+    private void doAddAction() throws IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
+            InvalidParameterSpecException, InvalidKeyException, FileNotFoundException
+    {
         String newUsername = null;
         String newPassword = null;
         AccountType accountType = null;
@@ -306,7 +361,10 @@ public class PasswordManagerWindow
         doAction(ButtonOption.ADD, newUsername, newPassword, accountType);
     }
 
-    private void doEditAction() {
+    private void doEditAction()
+            throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
+            InvalidParameterSpecException, InvalidKeyException
+    {
         String newUsername = null;
         String newPassword = null;
 
@@ -355,33 +413,32 @@ public class PasswordManagerWindow
         }
 
         doAction(ButtonOption.EDIT, newUsername, newPassword, null);
-
     }
 
-    private void doRemoveAction() {
+    private void doRemoveAction()
+            throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
+            InvalidParameterSpecException, InvalidKeyException
+    {
         doAction(ButtonOption.REMOVE, null, null, null);
         if (accounts.getModel().getSize() == 0) {
             label.setText("");
         }
-
     }
 
-    private void doLoginAction() {
-        try {
-            if (login.authenticateLogin(new String(loginPasswordField.getPassword()))) {
-                frame.dispose();
-                show(Window.PASSWORD_MANAGER);
-            }
-            else {
-                JOptionPane.showMessageDialog(frame, "Invalid password");
-                loginPasswordField.setText("");
-            }
-        } catch (NoSuchAlgorithmException | IOException | InvalidKeySpecException exception) {
-            exception.printStackTrace();
+    private void doLoginAction() throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, FileNotFoundException {
+        if (loginManager.authenticateLogin(new String(loginPasswordField.getPassword()))) {
+            frame.dispose();
+            show(Window.PASSWORD_MANAGER);
+        }
+        else {
+            JOptionPane.showMessageDialog(frame, "Invalid password");
+            loginPasswordField.setText("");
         }
     }
 
-    private void doContinueAction() {
+    private void doContinueAction()
+            throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, FileNotFoundException, NoSuchPaddingException
+    {
         if (Arrays.equals(setupPasswordField2.getPassword(), setupPasswordField1.getPassword())) {
             if (setupPasswordField1.getPassword().length < 8) {
                 JOptionPane.showMessageDialog(frame, "Password must be 8 characters or more");
@@ -390,14 +447,10 @@ public class PasswordManagerWindow
             }
             else {
                 frame.dispose();
-                try {
-                    String stringPassword = new String(setupPasswordField1.getPassword());
-                    logicHandler = new LogicHandler(stringPassword);
-                    logicHandler.saveHashToFile(stringPassword);
-                    show(Window.PASSWORD_MANAGER);
-                } catch (NoSuchAlgorithmException | IOException | InvalidKeySpecException exception) {
-                    exception.printStackTrace();
-                }
+                String stringPassword = new String(setupPasswordField1.getPassword());
+                logicHandler = new LogicHandler(stringPassword);
+                logicHandler.saveHashToFile(stringPassword);
+                show(Window.PASSWORD_MANAGER);
             }
         }
         else {
@@ -406,16 +459,14 @@ public class PasswordManagerWindow
         }
     }
 
-    private void doAction(ButtonOption button, String newUsername, String newPassword, AccountType accountType) {
+    private void doAction(ButtonOption button, String newUsername, String newPassword, AccountType accountType)
+            throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
+            InvalidParameterSpecException, InvalidKeyException
+    {
         int confirmAction = JOptionPane.showConfirmDialog(frame, "Are you sure you want to " + button + " this account?");
 
         if (confirmAction == 0) {
-            try {
-                logicHandler.doAccountAction(button, getSelectedAccount(), newUsername, newPassword, accountType);
-            } catch (FileNotFoundException | IllegalBlockSizeException | NoSuchPaddingException | BadPaddingException |
-                    NoSuchAlgorithmException | InvalidKeyException | InvalidParameterSpecException exception) {
-                exception.printStackTrace();
-            }
+            logicHandler.doAccountAction(button, getSelectedAccount(), newUsername, newPassword, accountType);
         }
 
         accounts.setModel(logicHandler.getAccounts().returnListModel());

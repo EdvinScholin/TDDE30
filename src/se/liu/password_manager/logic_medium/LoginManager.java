@@ -41,7 +41,6 @@ public class LoginManager
 
         try (Reader reader = new FileReader(FILE_NAME)) {
             return gson.fromJson(reader, byte[][].class);
-
         }
     }
 

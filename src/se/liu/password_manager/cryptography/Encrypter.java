@@ -22,8 +22,8 @@ public class Encrypter
     private static final String ENCRYPTION_ALGORITHM = "AES/CBC/PKCS5Padding";
 
     public Encrypter() throws NoSuchPaddingException, NoSuchAlgorithmException {
-        this.cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);         // Detta är inte en showstopper då namnet utgör
-    }										                            // vilken algoritm som ska användas.
+        this.cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
+    }
 
     public byte[][] encryptPassword(byte[] password, SecretKey key)
             throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidParameterSpecException

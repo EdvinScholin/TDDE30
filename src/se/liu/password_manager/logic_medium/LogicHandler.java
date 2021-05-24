@@ -44,28 +44,13 @@ public class LogicHandler
     private byte[] hashSalt = null;
     private byte[] derivationSalt = null;
 
-    public LogicHandler(String password) {
-        try {
-            this.accounts = readJsonAccountList();
-            this.hashSalt = readSaltFromFile()[0];
-            this.derivationSalt = readSaltFromFile()[1];
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
-
-        try {
-            KeyDeriver keyDeriver = new KeyDeriver(derivationSalt);
-            this.key = keyDeriver.deriveKey(password);
-        }
-        catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            initDecrypter();
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-            e.printStackTrace();
-        }
+    public LogicHandler(String password) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException {
+        this.accounts = readJsonAccountList();
+        this.hashSalt = readSaltFromFile()[0];
+        this.derivationSalt = readSaltFromFile()[1];
+        KeyDeriver keyDeriver = new KeyDeriver(derivationSalt);
+        this.key = keyDeriver.deriveKey(password);
+        initDecrypter();
     }
 
     private void initDecrypter() throws NoSuchAlgorithmException, NoSuchPaddingException {
@@ -103,7 +88,6 @@ public class LogicHandler
         random.nextBytes(salt);
         return salt;
     }
-
 
     public void doAccountAction(ButtonOption buttonOption, Account account, String newUsername, String newPassword, AccountType accountType)
             throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,

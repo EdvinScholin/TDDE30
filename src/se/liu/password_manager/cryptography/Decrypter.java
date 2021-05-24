@@ -20,8 +20,8 @@ public class Decrypter
     private static final String ENCRYPTION_ALGORITHM = "AES/CBC/PKCS5Padding";
 
     public Decrypter() throws NoSuchPaddingException, NoSuchAlgorithmException {
-        cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM); 	// Detta är inte en showstopper då namnet utgör
-    }														// vilken algoritm som ska användas.
+        cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
+    }
 
     public byte[] decryptPassword(byte[] encryptedPassword, SecretKey key, byte[] initVector)
 	    throws InvalidKeyException, BadPaddingException, IllegalBlockSizeException, InvalidAlgorithmParameterException
