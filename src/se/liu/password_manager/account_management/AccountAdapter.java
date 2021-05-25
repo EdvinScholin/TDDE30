@@ -24,9 +24,9 @@ public class AccountAdapter extends TypeAdapter<Account>
 	String printerValue = reader.nextString();
 	String[] parts = printerValue.split(";");
 	String username = parts[0];
-	byte[] password = gson.fromJson(parts[1], byte[].class);
-	byte[] initVector = gson.fromJson(parts[2], byte[].class);
-	AccountType accountType = AccountType.valueOf(parts[3]);
+	byte[] password = gson.fromJson(parts[1], byte[].class);	// This will not be simpler or easier to read with a
+	byte[] initVector = gson.fromJson(parts[2], byte[].class);  	// constant decsribing the index of two elements. This
+	AccountType accountType = AccountType.valueOf(parts[3]);	// goes for all magicnumber warnings in this class.
 
 	String accountNumber = null;
 	String email = null;
@@ -34,7 +34,7 @@ public class AccountAdapter extends TypeAdapter<Account>
 	if (accountType.equals(AccountType.BANK)) {
 	    accountNumber = parts[4];
 	}
-	else if (parts.length == 6 && accountType.equals(AccountType.EMAIL)) {
+	else if (accountType.equals(AccountType.EMAIL)) {
 	    email = parts[4];
 	    domain = parts[5];
 	}

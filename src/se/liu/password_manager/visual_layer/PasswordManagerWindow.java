@@ -341,7 +341,8 @@ public class PasswordManagerWindow
         int response = JOptionPane.showOptionDialog(null, "What type of account do you want to add?",
                                                     "Options", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
                                                     null, options, -1);
-        if (response == 0) {
+        if (response == 0) {        //We do not think the magic number warning is valid. We do not se how
+                                    // a named constant will help in this situation.
             newUsername = askUserAboutAccount("Username:");
             if (newUsername != null) {
                 newPassword = askUserAboutAccount("Password:");
@@ -349,7 +350,8 @@ public class PasswordManagerWindow
             }
 
         }
-        else if (response == 1) {
+        else if (response == 1) {   //We do not think the magic number warning is valid. We do not se how
+                                    // a named constant will help in this situation.
             newUsername = askUserAboutAccount("Username:");
             if (newUsername != null) {
                 newEmail = askUserAboutAccount("Email:");
@@ -362,7 +364,8 @@ public class PasswordManagerWindow
                 }
             }
         }
-        else if (response == 2) {
+        else if (response == 2) {   //We do not think the magic number warning is valid. We do not se how
+                                    // a named constant will help in this situation.
             newUsername = askUserAboutAccount("Social Security Number:");
             if (newUsername != null) {
                 newAccountNumber = askUserAboutAccount("Account Number:");
@@ -372,7 +375,8 @@ public class PasswordManagerWindow
                 }
             }
         }
-        else if (response == -1) {
+        else if (response == -1) {  //We do not think the magic number warning is valid. We do not se how
+                                    // a named constant will help in this situation.
             return;
         }
 
@@ -454,7 +458,8 @@ public class PasswordManagerWindow
         int response = JOptionPane.showOptionDialog(frame, "What do you want to edit?", "Options",
                                                     JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
                                                     options, -1);
-        if(response == 0) {
+        if (response == 0) {     //We do not think the magic number warning is valid. We do not se how
+                                 // a named constant will help in this situation.
             newPassword = askUserAboutAccount("What is your new password?");
             if (newPassword == null) {
                 return;
@@ -465,7 +470,8 @@ public class PasswordManagerWindow
                 return;
             }
         }
-        else if (response == 1) {
+        else if (response == 1) { //We do not think the magic number warning is valid. We do not se how
+                                  // a named constant will help in this situation.
             newUsername = askUserAboutAccount("What is your new username?");
             if (newUsername == null) {
                 return;
@@ -476,7 +482,8 @@ public class PasswordManagerWindow
                 return;
             }
         }
-        else if (response == 2) {
+        else if (response == 2) { //We do not think the magic number warning is valid. We do not se how
+                                  // a named constant will help in this situation.
             newEmail = askUserAboutAccount("What is your new email?");
             if (newEmail == null) {
                 return;
@@ -518,7 +525,8 @@ public class PasswordManagerWindow
                                                     JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
                                                     options, -1);
 
-        if(response == 0) {
+        if(response == 0) {     //We do not think the magic number warning is valid. We do not se how
+                                // a named constant will help in this situation.
             newPassword = askUserAboutAccount("What is your new password?");
             if (newPassword == null) {
                 return;
@@ -530,7 +538,8 @@ public class PasswordManagerWindow
             }
         }
 
-        else if (response == 1) {
+        else if (response == 1) {       //We do not think the magic number warning is valid. We do not se how
+                                        // a named constant will help in this situation.
             newUsername = askUserAboutAccount("What is your new social security number?");
             if (newUsername == null) {
                 return;
@@ -541,7 +550,8 @@ public class PasswordManagerWindow
                 return;
             }
         }
-        else if (response == 2) {
+        else if (response == 2) {   //We do not think the magic number warning is valid. We do not se how
+                                    // a named constant will help in this situation.
             newAccountNumber = askUserAboutAccount("What is your new account number?");
             if (newAccountNumber == null) {
                 return;
