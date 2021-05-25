@@ -388,7 +388,7 @@ public class PasswordManagerWindow
         doAction(ButtonOption.ADD, newUsername, newPassword, newAccountNumber, newEmail, newDomain, accountType);
     }
 
-    private void doEditStandardAccount()
+    private void editStandardAccount()
             throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
             InvalidParameterSpecException, InvalidKeyException
     {
@@ -441,7 +441,7 @@ public class PasswordManagerWindow
         doAction(ButtonOption.EDIT, newUsername, newPassword, null, null, null, null);
     }
 
-    private void doEditEmailAccount()
+    private void editEmailAccount()
             throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
             InvalidParameterSpecException, InvalidKeyException
     {
@@ -506,7 +506,7 @@ public class PasswordManagerWindow
 
     }
 
-    private void doEditBankAccount()
+    private void editBankAccount()
             throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
             InvalidParameterSpecException, InvalidKeyException
     {
