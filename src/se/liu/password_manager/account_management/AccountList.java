@@ -27,7 +27,8 @@ public class AccountList
     private List<Account> encryptedAccounts = new ArrayList<>();
     private static final String FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
 
-    public void addAccount(SecretKey key, String username, String password, AccountType accountType)
+    public void addAccount(SecretKey key, String username, String password, AccountType accountType, String accountNumber, String email,
+                           String domain)
             throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
             InvalidKeyException, InvalidParameterSpecException
     {
@@ -35,8 +36,8 @@ public class AccountList
         Account account = null;
         switch (accountType) {
             case STANDARD -> account = new StandardAccount(username, bytePassword, key, accountType);
-            case EMAIL -> account = new EmailAccount(username, bytePassword, key, accountType);
-            case BANK -> account = new BankAccount(username, bytePassword, key, accountType);
+            case EMAIL -> account = new EmailAccount(username, email, domain, bytePassword, key, accountType);
+            case BANK -> account = new BankAccount(username, accountNumber, bytePassword, key, accountType);
         }
 
         if (!encryptedAccounts.isEmpty()) {
@@ -74,7 +75,8 @@ public class AccountList
 
     }
 
-    public void editAccount(Account account, SecretKey key, String newUsername, String newPassword)
+    public void editAccount(Account account, SecretKey key, String newUsername, String newPassword, String newAccountNumber,
+                            String newEmail, String newDomain)
             throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, FileNotFoundException, NoSuchPaddingException,
             NoSuchAlgorithmException, InvalidParameterSpecException
     {
@@ -85,6 +87,13 @@ public class AccountList
         if (newUsername != null) {
             account.editUsername(newUsername);
         }
+        if (newAccountNumber != null) {
+            ((BankAccount)account).editBankAccountNumber(newAccountNumber);
+        }
+        if (newEmail != null && newDomain != null) {
+            ((EmailAccount)account).editEmail(newEmail);
+            ((EmailAccount)account).editDomain(newDomain);
+        }
 
         saveOnFile();
     }
@@ -92,7 +101,12 @@ public class AccountList
     public DefaultListModel<String> returnListModel() {
         DefaultListModel<String> listModel = new DefaultListModel<>();
         for (Account account : encryptedAccounts) {
-            listModel.addElement(account.getUsername());
+            if (account.getAccountType().equals(AccountType.STANDARD) || account.getAccountType().equals(AccountType.BANK)) {
+                listModel.addElement(account.getUsername());
+            }
+            else {
+                listModel.addElement(((EmailAccount)account).getEmail());
+            }
         }
         return listModel;
     }

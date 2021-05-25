@@ -26,5 +26,4 @@ public class StandardAccount extends AbstractAccount
     {
         super(userName, password, initVector, accountType);
     }
-
 }

@@ -28,11 +28,22 @@ public class AccountAdapter extends TypeAdapter<Account>
 	byte[] initVector = gson.fromJson(parts[2], byte[].class);
 	AccountType accountType = AccountType.valueOf(parts[3]);
 
+	String accountNumber = null;
+	String email = null;
+	String domain = null;
+	if (parts.length == 5 && accountType.equals(AccountType.BANK)) {
+	    accountNumber = parts[4];
+	}
+	else if (parts.length == 6 && accountType.equals(AccountType.EMAIL)) {
+	    email = parts[4];
+	    domain = parts[5];
+	}
+
 	Account account = null;
 	switch (accountType) {
 	    case STANDARD -> account = new StandardAccount(username, password, initVector, AccountType.STANDARD);
-	    case EMAIL -> account = new EmailAccount(username, password, initVector, AccountType.EMAIL);
-	    case BANK -> account = new BankAccount(username, password, initVector, AccountType.BANK);
+	    case EMAIL -> account = new EmailAccount(username, email, domain, password, initVector, AccountType.EMAIL);
+	    case BANK -> account = new BankAccount(username, accountNumber, password, initVector, AccountType.BANK);
 	}
 	return account;
     }

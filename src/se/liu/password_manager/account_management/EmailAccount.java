@@ -20,11 +20,30 @@ public class EmailAccount extends AbstractAccount
 	    InvalidParameterSpecException
     {
 	super(email, plainPassword, key, accountType);
+	this.email = email;
+	this.domain = domain;
     }
 
-    protected EmailAccount(final String email, final byte[] password, final byte[] initVector, AccountType accountType)
+    protected EmailAccount(final String userName, final String email, final String domain, final byte[] password, final byte[] initVector, AccountType accountType)
     {
 	super(email, password, initVector, accountType);
+	this.email = email;
+	this.domain = domain;
     }
 
+    public String getEmail() {
+	return email;
+    }
+
+    public String getDomain() {
+	return domain;
+    }
+
+    public void editEmail(String newEmail) {
+	email = newEmail;
+    }
+
+    public void editDomain(String newDomain) {
+	domain = newDomain;
+    }
 }

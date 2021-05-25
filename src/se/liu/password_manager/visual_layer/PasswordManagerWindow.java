@@ -3,6 +3,8 @@ package se.liu.password_manager.visual_layer;
 import net.miginfocom.swing.MigLayout;
 import se.liu.password_manager.account_management.Account;
 import se.liu.password_manager.account_management.AccountType;
+import se.liu.password_manager.account_management.BankAccount;
+import se.liu.password_manager.account_management.EmailAccount;
 import se.liu.password_manager.logic_medium.LogicHandler;
 import se.liu.password_manager.logic_medium.LoginManager;
 
@@ -61,7 +63,7 @@ public class PasswordManagerWindow
             initPasswordField(window);
         }
 
-        addButtons(window);                            // The order of when the components is initialized is
+        addButtons(window);                             // The order of when the components is initialized is
                                                         // important for the purpose of the order in which
         if (window == Window.PASSWORD_MANAGER) {        // they appear in the window.
             if (logicHandler == null) {
@@ -122,9 +124,6 @@ public class PasswordManagerWindow
             InvalidAlgorithmParameterException
     {
         label = new JLabel("");
-        if (accounts.getModel().getSize() != 0) {
-            label.setText(logicHandler.getAccountPassword(getSelectedAccount()));
-        }
         label.setVerticalAlignment(JLabel.TOP);
         Border border = BorderFactory.createLineBorder(Color.GRAY);
         label.setBorder(border);
@@ -217,7 +216,16 @@ public class PasswordManagerWindow
             if (accounts.getModel().getSize() != 0) {
                 Account account = getSelectedAccount();
                 try {
-                    label.setText(logicHandler.getAccountPassword(account));
+                    if (account.getAccountType() == AccountType.STANDARD) {
+                        label.setText("Password: " + logicHandler.getAccountPassword(account));
+                    }
+                    else if (account.getAccountType() == AccountType.EMAIL) {
+                        label.setText("<html>Password: " + logicHandler.getAccountPassword(account) + "<br>Email: " +
+                                      ((EmailAccount)account).getEmail() + "<br>Domain: " + ((EmailAccount)account).getDomain() + "<html>");
+                    }
+                    else if (account.getAccountType() == AccountType.BANK) {
+                        label.setText("<html>Password: " + logicHandler.getAccountPassword(account) + "<br>Account Number: " + ((BankAccount)account).getBankAccountNumber());
+                    }
                 } catch (IllegalBlockSizeException | BadPaddingException | InvalidKeyException |
                         InvalidAlgorithmParameterException exception) {
                     exception.printStackTrace();
@@ -361,13 +369,12 @@ public class PasswordManagerWindow
         doAction(ButtonOption.ADD, newUsername, newPassword, accountType);
     }
 
-    private void doEditAction()
+    private void doEditStandardAccount()
             throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
             InvalidParameterSpecException, InvalidKeyException
     {
         String newUsername = null;
         String newPassword = null;
-
         String[] options = new String[] { "Edit password", "Edit username", "Edit both" };
         int response = JOptionPane.showOptionDialog(frame, "What do you want to edit?", "Options",
                                                     JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
@@ -378,7 +385,7 @@ public class PasswordManagerWindow
                 return;
             }
             else if (newPassword.isEmpty()) {
-                JOptionPane.showMessageDialog(frame, "The password or the username can not be empty!",
+                JOptionPane.showMessageDialog(frame, "The password can not be empty!",
                                               "ERROR", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -389,7 +396,7 @@ public class PasswordManagerWindow
                 return;
             }
             else if (newUsername.isEmpty()) {
-                JOptionPane.showMessageDialog(frame, "The password or the username can not be empty!",
+                JOptionPane.showMessageDialog(frame, "The username can not be empty!",
                                               "ERROR", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -412,14 +419,134 @@ public class PasswordManagerWindow
             return;
         }
 
-        doAction(ButtonOption.EDIT, newUsername, newPassword, null);
+        doAction(ButtonOption.EDIT, newUsername, newPassword, null, null, null, null);
+    }
+
+    private void doEditEmailAccount()
+            throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
+            InvalidParameterSpecException, InvalidKeyException
+    {
+        String newUsername = null;
+        String newPassword = null;
+        String newEmail = null;
+        String newDomain = null;
+
+        String[] options = new String[] { "Edit password", "Edit Username", "Edit Email and Domain" };
+        int response = JOptionPane.showOptionDialog(frame, "What do you want to edit?", "Options",
+                                                    JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
+                                                    options, -1);
+        if(response == 0) {
+            newPassword = askUserAboutAccount("What is your new password?");
+            if (newPassword == null) {
+                return;
+            }
+            else if (newPassword.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "The password can not be empty!",
+                                              "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        else if (response == 1) {
+            newUsername = askUserAboutAccount("What is your new username?");
+            if (newUsername == null) {
+                return;
+            }
+            else if (newUsername.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "The username can not be empty!",
+                                              "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        else if (response == 2) {
+            newEmail = askUserAboutAccount("What is your new email?");
+            if (newEmail == null) {
+                return;
+            }
+            else if (newEmail.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "The email can not be empty!",
+                                              "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            else {
+                newDomain = askUserAboutAccount("What is your new domain?");
+                if (newDomain == null) {
+                    return;
+                }
+                else if (newDomain.isEmpty()) {
+                    JOptionPane.showMessageDialog(frame, "The domain can not be empty!",
+                                                  "ERROR", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+        }
+        else {
+            return;
+        }
+
+        doAction(ButtonOption.EDIT, newUsername, newPassword, null, newEmail, newDomain, null);
+
+    }
+
+    private void doEditBankAccount()
+            throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
+            InvalidParameterSpecException, InvalidKeyException
+    {
+        String newUsername = null;
+        String newPassword = null;
+        String newAccountNumber = null;
+        String[] options = new String[] { "Edit password", "Edit Social Security Number", "Edit Account Number" };
+        int response = JOptionPane.showOptionDialog(frame, "What do you want to edit?", "Options",
+                                                    JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
+                                                    options, -1);
+
+        if(response == 0) {
+            newPassword = askUserAboutAccount("What is your new password?");
+            if (newPassword == null) {
+                return;
+            }
+            else if (newPassword.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "The password can not be empty!",
+                                              "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        else if (response == 1) {
+            newUsername = askUserAboutAccount("What is your new social security number?");
+            if (newUsername == null) {
+                return;
+            }
+            else if (newUsername.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "The social security number can not be empty!",
+                                              "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        else if (response == 2) {
+            newAccountNumber = askUserAboutAccount("What is your new account number?");
+            if (newAccountNumber == null) {
+                return;
+            }
+            else if (newAccountNumber.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "The account number can not be empty!",
+                                              "ERROR", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        else {
+            return;
+        }
+
+        doAction(ButtonOption.EDIT, newUsername, newPassword, newAccountNumber, null, null, null);
+
     }
 
     private void doRemoveAction()
             throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
             InvalidParameterSpecException, InvalidKeyException
     {
-        doAction(ButtonOption.REMOVE, null, null, null);
+        doAction(ButtonOption.REMOVE, null, null, null, null, null,
+                 null);
         if (accounts.getModel().getSize() == 0) {
             label.setText("");
         }

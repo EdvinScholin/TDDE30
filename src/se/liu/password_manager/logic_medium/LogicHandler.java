@@ -95,13 +95,13 @@ public class LogicHandler
     {
         switch (buttonOption) {
             case ADD:
-                accounts.addAccount(key, newUsername, newPassword, accountType);
+                accounts.addAccount(key, newUsername, newPassword, accountType, newAccountNumber, newEmail, newDomain);
                 break;
             case REMOVE:
                 accounts.removeAccount(account);
                 break;
             case EDIT:
-                accounts.editAccount(account, key, newUsername, newPassword);
+                accounts.editAccount(account, key, newUsername, newPassword, newAccountNumber, newEmail, newDomain);
                 break;
         }
     }
