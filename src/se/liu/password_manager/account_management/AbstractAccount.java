@@ -18,7 +18,7 @@ import java.security.spec.InvalidParameterSpecException;
  * possibilities to change the username and password.
  */
 
-abstract class AbstractAccount implements Account
+public abstract class AbstractAccount implements Account
 {
     protected String username;
     protected byte[] password, initVector;

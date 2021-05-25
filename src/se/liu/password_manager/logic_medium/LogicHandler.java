@@ -38,11 +38,11 @@ public class LogicHandler
 {
     private static final String ACCOUNTS_FILE_NAME = "." + File.separator + "EncryptedAccounts.json";
     private static final String PASSWORD_FILE_NAME = "." + File.separator + "HashedPassword.txt";
-    private AccountList accounts = null;
-    private SecretKey key = null;
-    private Decrypter decrypter = null;
-    private byte[] hashSalt = null;
-    private byte[] derivationSalt = null;
+    private AccountList accounts;
+    private SecretKey key;
+    private Decrypter decrypter;
+    private byte[] hashSalt;
+    private byte[] derivationSalt;
 
     public LogicHandler(String password) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException {
         this.accounts = readJsonAccountList();
@@ -83,8 +83,8 @@ public class LogicHandler
     }
 
     private byte[] generateSalt() {     //generates random salt
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[18];
+        SecureRandom random = new SecureRandom(); // We place this random number generator here because it is only used
+        byte[] salt = new byte[18];               // once at the setup of main password, it does not require a field for this.
         random.nextBytes(salt);
         return salt;
     }

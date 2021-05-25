@@ -128,7 +128,6 @@ public class PasswordManagerWindow
         Border border = BorderFactory.createLineBorder(Color.GRAY);
         label.setBorder(border);
         frame.add(label, "top, grow");
-
     }
 
     private void initPasswordField(Window window) {

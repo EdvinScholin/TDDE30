@@ -23,14 +23,14 @@ public class EmailAccount extends AbstractAccount
 	    throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException,
 	    InvalidParameterSpecException
     {
-	super(email, plainPassword, key, accountType);
+	super(userName, plainPassword, key, accountType);
 	this.email = email;
 	this.domain = domain;
     }
 
     protected EmailAccount(final String userName, final String email, final String domain, final byte[] password, final byte[] initVector, AccountType accountType)
     {
-	super(email, password, initVector, accountType);
+	super(userName, password, initVector, accountType);
 	this.email = email;
 	this.domain = domain;
     }
