@@ -41,10 +41,10 @@ public class AccountList
         }
 
         if (!encryptedAccounts.isEmpty()) {
-            encryptedAccounts.add(0, account);
+            encryptedAccounts.add(0, account); //in order to add account to top of list.
         }
         else {
-            encryptedAccounts.add(account);
+            encryptedAccounts.add(account); //if encryptedAccounts empty just add to list without index.
         }
 
         saveOnFile();
@@ -98,7 +98,8 @@ public class AccountList
         saveOnFile();
     }
 
-    public DefaultListModel<String> returnListModel() {
+
+    public DefaultListModel<String> returnListModel() { //returns compatible list format for JList.
         DefaultListModel<String> listModel = new DefaultListModel<>();
         for (Account account : encryptedAccounts) {
             if (account.getAccountType().equals(AccountType.STANDARD) || account.getAccountType().equals(AccountType.BANK)) {

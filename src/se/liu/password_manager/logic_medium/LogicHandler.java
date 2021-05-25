@@ -82,7 +82,7 @@ public class LogicHandler
         }
     }
 
-    private byte[] generateSalt() {
+    private byte[] generateSalt() {     //generates random salt
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[18];
         random.nextBytes(salt);
