@@ -1,9 +1,6 @@
 package se.liu.password_manager.visual_layer;
 
-import javax.crypto.NoSuchPaddingException;
-import javax.swing.*;
 import java.io.File;
-import java.security.NoSuchAlgorithmException;
 
 /**
  * Acting as start up and window manager for the main program.

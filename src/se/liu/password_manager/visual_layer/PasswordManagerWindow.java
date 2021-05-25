@@ -75,14 +75,8 @@ public class PasswordManagerWindow
                                                   "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
             }
-
             setJList();
-
-            try {
-                initLabel();
-            } catch (IllegalBlockSizeException | BadPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e) {
-                e.printStackTrace();
-            }
+            initLabel();
         }
 
         addListeners(window);
@@ -120,9 +114,7 @@ public class PasswordManagerWindow
         frame.add(jScrollPane, "span 2, grow");
     }
 
-    private void initLabel() throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException,
-            InvalidAlgorithmParameterException
-    {
+    private void initLabel() {
         label = new JLabel("");
         label.setVerticalAlignment(JLabel.TOP);
         Border border = BorderFactory.createLineBorder(Color.GRAY);
@@ -219,8 +211,8 @@ public class PasswordManagerWindow
                         label.setText("Password: " + logicHandler.getAccountPassword(account));
                     }
                     else if (account.getAccountType() == AccountType.EMAIL) {
-                        label.setText("<html>Password: " + logicHandler.getAccountPassword(account) + "<br>Email: " +
-                                      ((EmailAccount)account).getEmail() + "<br>Domain: " + ((EmailAccount)account).getDomain() + "<html>");
+                        label.setText("<html>Password: " + logicHandler.getAccountPassword(account) + "<br>Username: " +
+                                      account.getUsername() + "<br>Domain: " + ((EmailAccount)account).getDomain() + "<html>");
                     }
                     else if (account.getAccountType() == AccountType.BANK) {
                         label.setText("<html>Password: " + logicHandler.getAccountPassword(account) + "<br>Account Number: " + ((BankAccount)account).getBankAccountNumber());
