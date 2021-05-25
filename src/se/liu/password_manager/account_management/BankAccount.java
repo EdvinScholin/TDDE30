@@ -9,7 +9,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidParameterSpecException;
 
 /**
- * This class represents the bank account type which contains a social security number (sSN) and an encrypted password.
+ * This class represents the bank account type which contains a social security number and an encrypted password.
  * This class is a subclass to AbstractAccount
  */
 

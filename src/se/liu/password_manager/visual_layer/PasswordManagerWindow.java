@@ -48,6 +48,7 @@ public class PasswordManagerWindow
     private static final int LOCATIONX = 710;
     private static final int LOCATIONY = 290;
     private static final String SETUP_FILE_NAME = "resources" + File.separator + "images" + File.separator + "setup_pic.png";
+    private static final int PASSWORD_CHAR_LIMIT = 8;
 
     public void show(Window window) {
         initFrame(window);
@@ -69,8 +70,8 @@ public class PasswordManagerWindow
             if (logicHandler == null) {
                 try {
                     logicHandler = new LogicHandler(new String(loginPasswordField.getPassword()));
-                } catch (IOException | NoSuchPaddingException | InvalidKeySpecException | NoSuchAlgorithmException ioException) {
-                    ioException.printStackTrace();
+                } catch (IOException | NoSuchPaddingException | InvalidKeySpecException | NoSuchAlgorithmException exception) {
+                    exception.printStackTrace();
                     JOptionPane.showMessageDialog(frame, "Logical error, either with file reading or encryption",
                                                   "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
@@ -206,20 +207,25 @@ public class PasswordManagerWindow
             selectedIndex = accounts.getSelectedIndex();
             if (accounts.getModel().getSize() != 0) {
                 Account account = getSelectedAccount();
+                AccountType accountType = getSelectedAccount().getAccountType();
+                String password = null;
                 try {
-                    if (account.getAccountType() == AccountType.STANDARD) {
-                        label.setText("Password: " + logicHandler.getAccountPassword(account));
-                    }
-                    else if (account.getAccountType() == AccountType.EMAIL) {
-                        label.setText("<html>Password: " + logicHandler.getAccountPassword(account) + "<br>Username: " +
-                                      account.getUsername() + "<br>Domain: " + ((EmailAccount)account).getDomain() + "<html>");
-                    }
-                    else if (account.getAccountType() == AccountType.BANK) {
-                        label.setText("<html>Password: " + logicHandler.getAccountPassword(account) + "<br>Account Number: " + ((BankAccount)account).getBankAccountNumber());
-                    }
-                } catch (IllegalBlockSizeException | BadPaddingException | InvalidKeyException |
-                        InvalidAlgorithmParameterException exception) {
+                    password = logicHandler.getAccountPassword(account);
+                } catch (IllegalBlockSizeException | InvalidAlgorithmParameterException | InvalidKeyException | BadPaddingException
+                        exception) {
                     exception.printStackTrace();
+                }
+
+                if (accountType == AccountType.STANDARD) {
+                    label.setText("Password: " + password);
+                }
+                else if (accountType == AccountType.EMAIL) {
+                    label.setText("<html>Password: " + password + "<br>Username: " +
+                                  account.getUsername() + "<br>Domain: " + ((EmailAccount)account).getDomain() + "<html>");
+                }
+                else if (accountType == AccountType.BANK) {
+                    label.setText("<html>Password: " + password + "<br>Account Number: " +
+                                  ((BankAccount)account).getBankAccountNumber());
                 }
             }
         }
@@ -249,15 +255,17 @@ public class PasswordManagerWindow
                 }
             }
             else if (button == ButtonOption.EDIT) {
+                AccountType accountType = getSelectedAccount().getAccountType();
+
                 try {
-                    if (getSelectedAccount().getAccountType() == AccountType.STANDARD) {
-                        doEditStandardAccount();
+                    if (accountType == AccountType.STANDARD) {
+                        editStandardAccount();
                     }
-                    else if (getSelectedAccount().getAccountType() == AccountType.BANK) {
-                        doEditBankAccount();
+                    else if (accountType == AccountType.BANK) {
+                        editBankAccount();
                     }
-                    else if (getSelectedAccount().getAccountType() == AccountType.EMAIL) {
-                        doEditEmailAccount();
+                    else if (accountType == AccountType.EMAIL) {
+                        editEmailAccount();
                     }
                 } catch (FileNotFoundException | InvalidKeyException | InvalidParameterSpecException | NoSuchAlgorithmException
                         | BadPaddingException | NoSuchPaddingException | IllegalBlockSizeException exception) {
@@ -286,8 +294,8 @@ public class PasswordManagerWindow
                     exception.printStackTrace();
                     JOptionPane.showMessageDialog(frame, "Login error!",
                                                   "ERROR", JOptionPane.ERROR_MESSAGE);
-                } catch (IOException iOException) {
-                    iOException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
                     JOptionPane.showMessageDialog(frame, "File with main password can not be found!",
                                                   "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
@@ -299,8 +307,8 @@ public class PasswordManagerWindow
                     exception.printStackTrace();
                     JOptionPane.showMessageDialog(frame, "Login error!",
                                                   "ERROR", JOptionPane.ERROR_MESSAGE);
-                } catch (IOException iOException) {
-                    iOException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
                     JOptionPane.showMessageDialog(frame, "File with main password can not be created!",
                                                   "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
@@ -578,7 +586,7 @@ public class PasswordManagerWindow
             throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, FileNotFoundException, NoSuchPaddingException
     {
         if (Arrays.equals(setupPasswordField2.getPassword(), setupPasswordField1.getPassword())) {
-            if (setupPasswordField1.getPassword().length < 8) {
+            if (setupPasswordField1.getPassword().length < PASSWORD_CHAR_LIMIT) {
                 JOptionPane.showMessageDialog(frame, "Password must be 8 characters or more");
                 setupPasswordField1.setText("");
                 setupPasswordField2.setText("");
