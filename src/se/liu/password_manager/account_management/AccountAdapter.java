@@ -21,8 +21,8 @@ public class AccountAdapter extends TypeAdapter<Account>
 	    return null;
 	}
 	Gson gson = new Gson();
-	String xy = reader.nextString();
-	String[] parts = xy.split(";");
+	String printerValue = reader.nextString();
+	String[] parts = printerValue.split(";");
 	String username = parts[0];
 	byte[] password = gson.fromJson(parts[1], byte[].class);
 	byte[] initVector = gson.fromJson(parts[2], byte[].class);
@@ -53,9 +53,21 @@ public class AccountAdapter extends TypeAdapter<Account>
 	    writer.nullValue();
 	    return;
 	}
+	String printerValue = null;
 	Gson gson = new Gson();
+	switch (account.getAccountType()) {
+	    case STANDARD -> printerValue =
+		    account.getUsername() + ";" + gson.toJson(account.getPassword()) + ";" + gson.toJson(account.getInitVector()) + ";" +
+		    account.getAccountType();
+	    case EMAIL -> printerValue =
+		    account.getUsername()+ ";" + gson.toJson(account.getPassword()) + ";" + gson.toJson(account.getInitVector()) + ";" +
+		    account.getAccountType() + ";" + ((EmailAccount)account).getEmail() + ";" +
+		    ((EmailAccount)account).getDomain();
+	    case BANK -> printerValue =
+		    account.getUsername()+ ";" + gson.toJson(account.getPassword()) + ";" + gson.toJson(account.getInitVector()) + ";" +
+		    account.getAccountType() + ";" + ((BankAccount)account).getBankAccountNumber();
+	}
 
-	String xy = account.getUsername()+ ";" + gson.toJson(account.getPassword()) + ";" + gson.toJson(account.getInitVector()) + ";" + account.getAccountType();
-	writer.value(xy);
+	writer.value(printerValue);
     }
 }

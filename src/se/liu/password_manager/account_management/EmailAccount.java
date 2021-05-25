@@ -15,7 +15,10 @@ import java.security.spec.InvalidParameterSpecException;
 
 public class EmailAccount extends AbstractAccount
 {
-    protected EmailAccount(final String email, final byte[] plainPassword, final SecretKey key, AccountType accountType)
+    private String email;
+    private String domain;
+    protected EmailAccount(final String userName, final String email, final String domain, final byte[] plainPassword, final SecretKey key,
+			   AccountType accountType)
 	    throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException,
 	    InvalidParameterSpecException
     {

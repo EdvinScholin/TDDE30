@@ -259,7 +259,15 @@ public class PasswordManagerWindow
             }
             else if (button == ButtonOption.EDIT) {
                 try {
-                    doEditAction();
+                    if (getSelectedAccount().getAccountType() == AccountType.STANDARD) {
+                        doEditStandardAccount();
+                    }
+                    else if (getSelectedAccount().getAccountType() == AccountType.BANK) {
+                        doEditBankAccount();
+                    }
+                    else if (getSelectedAccount().getAccountType() == AccountType.EMAIL) {
+                        doEditEmailAccount();
+                    }
                 } catch (FileNotFoundException | InvalidKeyException | InvalidParameterSpecException | NoSuchAlgorithmException
                         | BadPaddingException | NoSuchPaddingException | IllegalBlockSizeException exception) {
                     exception.printStackTrace();
@@ -325,6 +333,9 @@ public class PasswordManagerWindow
     {
         String newUsername = null;
         String newPassword = null;
+        String newAccountNumber = null;
+        String newEmail = null;
+        String newDomain = null;
         AccountType accountType = null;
 
         String[] options = new String[] { "Standard", "Email", "Bank" };
@@ -340,17 +351,26 @@ public class PasswordManagerWindow
 
         }
         else if (response == 1) {
-            newUsername = askUserAboutAccount("Email:");
+            newUsername = askUserAboutAccount("Username:");
             if (newUsername != null) {
-                newPassword = askUserAboutAccount("Password:");
+                newEmail = askUserAboutAccount("Email:");
                 accountType = AccountType.EMAIL;
+                if (newEmail != null) {
+                    newDomain = askUserAboutAccount("Domain:");
+                    if (newDomain != null) {
+                        newPassword = askUserAboutAccount("Password:");
+                    }
+                }
             }
         }
         else if (response == 2) {
             newUsername = askUserAboutAccount("Social Security Number:");
             if (newUsername != null) {
-                newPassword = askUserAboutAccount("Password:");
+                newAccountNumber = askUserAboutAccount("Account Number:");
                 accountType = AccountType.BANK;
+                if (newAccountNumber != null) {
+                    newPassword = askUserAboutAccount("Password:");
+                }
             }
         }
         else if (response == -1) {
@@ -366,7 +386,7 @@ public class PasswordManagerWindow
             return;
         }
 
-        doAction(ButtonOption.ADD, newUsername, newPassword, accountType);
+        doAction(ButtonOption.ADD, newUsername, newPassword, newAccountNumber, newEmail, newDomain, accountType);
     }
 
     private void doEditStandardAccount()
@@ -586,14 +606,16 @@ public class PasswordManagerWindow
         }
     }
 
-    private void doAction(ButtonOption button, String newUsername, String newPassword, AccountType accountType)
+    private void doAction(ButtonOption button, String newUsername, String newPassword, String newAccountNumber,
+                          String newEmail, String newDomain, AccountType accountType)
             throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
             InvalidParameterSpecException, InvalidKeyException
     {
         int confirmAction = JOptionPane.showConfirmDialog(frame, "Are you sure you want to " + button + " this account?");
 
         if (confirmAction == 0) {
-            logicHandler.doAccountAction(button, getSelectedAccount(), newUsername, newPassword, accountType);
+            logicHandler.doAccountAction(button, getSelectedAccount(), newUsername, newPassword, newAccountNumber,
+                                         newEmail, newDomain, accountType);
         }
 
         accounts.setModel(logicHandler.getAccounts().returnListModel());

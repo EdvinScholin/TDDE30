@@ -89,7 +89,8 @@ public class LogicHandler
         return salt;
     }
 
-    public void doAccountAction(ButtonOption buttonOption, Account account, String newUsername, String newPassword, AccountType accountType)
+    public void doAccountAction(ButtonOption buttonOption, Account account, String newUsername, String newPassword,
+                                String newAccountNumber, String newEmail, String newDomain, AccountType accountType)
             throws FileNotFoundException, IllegalBlockSizeException, NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException,
             InvalidKeyException, InvalidParameterSpecException
     {
