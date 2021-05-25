@@ -29,17 +29,16 @@ abstract class AbstractAccount implements Account
 	    InvalidParameterSpecException
     {
 	this.username = userName;
-	byte[][] array = initPassword(plainPassword, key);  	// Detta måste vi göra för att om encrypter.cryptoPassword(password, key);
-								// körs flera gånger ändras IV:n och kan inte decrypta lösenorden.
-	this.password = array[0];
+	byte[][] array = initPassword(plainPassword, key);  				// Constructor for creating an account for
+	this.password = array[0];							// for the first time
 	this.initVector = array[1];
 	this.accountType = accountType;
     }
 
     protected AbstractAccount(final String userName, byte[] password, byte[] initVector, AccountType accountType) {
         this.username = userName;
-        this.password = password;
-        this.initVector = initVector;
+        this.password = password;							// Constructor for reading of files and creating
+        this.initVector = initVector;							// and creating the current accounts from saved data
 	this.accountType = accountType;
     }
 

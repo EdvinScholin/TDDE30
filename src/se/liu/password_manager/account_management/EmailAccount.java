@@ -17,6 +17,7 @@ public class EmailAccount extends AbstractAccount
 {
     private String email;
     private String domain;
+
     protected EmailAccount(final String userName, final String email, final String domain, final byte[] plainPassword, final SecretKey key,
 			   AccountType accountType)
 	    throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException,

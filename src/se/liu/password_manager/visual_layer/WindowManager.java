@@ -1,6 +1,7 @@
 package se.liu.password_manager.visual_layer;
 
 import javax.crypto.NoSuchPaddingException;
+import javax.swing.*;
 import java.io.File;
 import java.security.NoSuchAlgorithmException;
 
@@ -17,7 +18,7 @@ public class WindowManager
         this.window = new PasswordManagerWindow();
     }
 
-    private void initManager() throws NoSuchPaddingException, NoSuchAlgorithmException {
+    private void initManager() {
         if (isFirstTimeStartup()) {
             doFirstTimeStartup();
         }
@@ -28,8 +29,8 @@ public class WindowManager
 
     private boolean isFirstTimeStartup() {
         File hashedPassword = new File(FILE_NAME);
-        return !hashedPassword.exists();
-    }
+        return !hashedPassword.exists();                        // Is there a main password established? If yes, then we will proceed
+    }                                                           // to login, otherwise do the setup
 
     private void doFirstTimeStartup()  {
         window.show(Window.SETUP);
@@ -42,11 +43,6 @@ public class WindowManager
     public static void main(String[] args)
     {
        WindowManager windowManager = new WindowManager();
-        try {
-            windowManager.initManager();
-        }
-        catch (NoSuchPaddingException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+       windowManager.initManager();
     }
 }
