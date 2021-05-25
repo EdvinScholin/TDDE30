@@ -43,6 +43,7 @@ public class LogicHandler
     private Decrypter decrypter;
     private byte[] hashSalt;
     private byte[] derivationSalt;
+    private static final int SALTLENGTH = 18;
 
     public LogicHandler(String password) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException, NoSuchPaddingException {
         this.accounts = readJsonAccountList();
@@ -82,9 +83,9 @@ public class LogicHandler
         }
     }
 
-    private byte[] generateSalt() {     //generates random salt
-        SecureRandom random = new SecureRandom(); // We place this random number generator here because it is only used
-        byte[] salt = new byte[18];               // once at the setup of main password, it does not require a field for this.
+    private byte[] generateSalt() {                 // Generates random salt.
+        SecureRandom random = new SecureRandom();   // We place this random number generator here because it is only used
+        byte[] salt = new byte[SALTLENGTH];         // once at the setup of main password, it does not require a field for this.
         random.nextBytes(salt);
         return salt;
     }
@@ -121,8 +122,8 @@ public class LogicHandler
         Gson gson = new Gson();
         try (Reader reader = new FileReader(PASSWORD_FILE_NAME)) {
             byte[][] salt = gson.fromJson(reader, byte[][].class);
-            return new byte[][] {salt[1], salt[2]};
-        } catch (FileNotFoundException ignored) {
+            return new byte[][] {salt[1], salt[2]};                         // This will not be simpler or easier to read with a
+        } catch (FileNotFoundException ignored) {                           // constant decsribing the index of two elements.
             return new byte[][] {generateSalt(), generateSalt()};
         }
     }

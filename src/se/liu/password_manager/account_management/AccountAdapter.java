@@ -31,7 +31,7 @@ public class AccountAdapter extends TypeAdapter<Account>
 	String accountNumber = null;
 	String email = null;
 	String domain = null;
-	if (parts.length == 5 && accountType.equals(AccountType.BANK)) {
+	if (accountType.equals(AccountType.BANK)) {
 	    accountNumber = parts[4];
 	}
 	else if (parts.length == 6 && accountType.equals(AccountType.EMAIL)) {
@@ -60,13 +60,11 @@ public class AccountAdapter extends TypeAdapter<Account>
 	String initVector = gson.toJson(account.getInitVector());
 	AccountType accountType = account.getAccountType();
 	switch (account.getAccountType()) {
-	    case STANDARD -> printerValue =
-		    username + ";" + password + ";" + initVector + ";" + accountType;
-	    case EMAIL -> printerValue =
-		    username + ";" + password + ";" + initVector + ";" + accountType + ";" + ((EmailAccount)account).getEmail() + ";" +
-		    ((EmailAccount)account).getDomain();
-	    case BANK -> printerValue =
-		    username + ";" + password + ";" + initVector + ";" + accountType + ";" + ((BankAccount)account).getBankAccountNumber();
+	    case STANDARD -> printerValue = username + ";" + password + ";" + initVector + ";" + accountType;
+	    case EMAIL -> printerValue = username + ";" + password + ";" + initVector + ";" + accountType + ";" +
+					 ((EmailAccount)account).getEmail() + ";" + ((EmailAccount)account).getDomain();
+	    case BANK -> printerValue = username + ";" + password + ";" + initVector + ";" + accountType + ";" +
+					((BankAccount)account).getBankAccountNumber();
 	}
 
 	writer.value(printerValue);

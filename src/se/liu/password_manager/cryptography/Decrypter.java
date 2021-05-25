@@ -17,8 +17,8 @@ import java.security.NoSuchAlgorithmException;
 public class Decrypter
 {
     private Cipher cipher;
-    private static final String ENCRYPTION_ALGORITHM = "AES/CBC/PKCS5Padding";
-
+    private static final String ENCRYPTION_ALGORITHM = "AES/CBC/PKCS5Padding";  // This is not a file and the showstopper is therefore
+    										// not valid.
     public Decrypter() throws NoSuchPaddingException, NoSuchAlgorithmException {
         cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
     }

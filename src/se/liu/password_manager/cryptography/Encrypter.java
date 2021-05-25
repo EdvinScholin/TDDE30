@@ -19,8 +19,8 @@ import java.security.spec.InvalidParameterSpecException;
 public class Encrypter
 {
     private Cipher cipher;
-    private static final String ENCRYPTION_ALGORITHM = "AES/CBC/PKCS5Padding";
-
+    private static final String ENCRYPTION_ALGORITHM = "AES/CBC/PKCS5Padding";      // This is not a file and the showstopper is therefore
+                                                                                    // not valid.
     public Encrypter() throws NoSuchPaddingException, NoSuchAlgorithmException {
         this.cipher = Cipher.getInstance(ENCRYPTION_ALGORITHM);
     }

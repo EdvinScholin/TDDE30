@@ -23,9 +23,9 @@ public class KeyDeriver {
     }
 
     public SecretKey deriveKey(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
-	    KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, 65536, 256);
-	    SecretKeyFactory factory = SecretKeyFactory.getInstance(HASHING_ALGORITHM);
-	    byte[] key = factory.generateSecret(keySpec).getEncoded();
-	    return new SecretKeySpec(key, DERIVING_ALGORITHM);
+	    KeySpec keySpec = new PBEKeySpec(password.toCharArray(), salt, 65536, 256); 	// This warning is
+	    SecretKeyFactory factory = SecretKeyFactory.getInstance(HASHING_ALGORITHM);				// unneccessary because the
+	    byte[] key = factory.generateSecret(keySpec).getEncoded();						// name is fully
+	    return new SecretKeySpec(key, DERIVING_ALGORITHM);							// understandable
     }
 }
